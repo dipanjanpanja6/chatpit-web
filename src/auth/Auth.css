@@ -1,19 +1,33 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
-
-.App-logo {
+/* a{
+  padding: 5px 0px;
+  text-decoration: none;
+} */
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
+} */
+.loginBG{
+  background: url(../img/bg.jpg);
+  background-position: center;
+  background-size: cover;
 }
-
+.loginHelp p{
+  font-size: small;
+  cursor: pointer;
+}
+.MuiInputBase-root{
+  font-size: .9rem !important;
+}
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
+  /* .App-logo {
     animation: App-logo-spin infinite 20s linear;
-  }
+  } */
 }
 
-.App-header {
+/* .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -22,11 +36,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
-.App-link {
+/* .App-link {
   color: #61dafb;
-}
+} */
 
 @keyframes App-logo-spin {
   from {

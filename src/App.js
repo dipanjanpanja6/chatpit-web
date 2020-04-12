@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
+
+import AppBar from './appbar/appbar'
+// import AuthChecker from './loading/authCheck'
+import Auth from './auth/auth'
+import Home from './home/home';
+import Massenger from './home/massegenger/masenger'
+import Messenger from './home/massegenger/index'
+
+import { Provider } from 'react-redux'
+import store from './redux/store'
+
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Provider store={store}>
+        {/* <AppBar /> */}
+        <Router>
+
+          {/* <Route exact path="/authChecker" component={AuthChecker} /> */}
+
+          <Route exact path="/test" component={Messenger} />
+          <Route exact path="/auth" component={Auth} />
+          <Route exact path="/" component={Home} />
+          {/* <Route exact path="/" component={Navigation} /> */}
+
+
+        </Router>
+      </Provider>
+
     </div>
   );
 }
