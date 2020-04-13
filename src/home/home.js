@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import PropType from "prop-types";
-import { token } from "../redux/action/authaction";
+import { token ,checkAuthenticated} from "../redux/action/authaction";
 import { getPosts } from "../redux/action/postAction";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
@@ -50,12 +50,14 @@ import PostCard from "../component/posts/postCard";
 import CopyRight from "../component/copyright";
 import Layout from "../profile/index";
 import Messenger from '../home/massegenger/masenger'
+import Loading from '../loading/loading'
+
 
 class Home extends Component {
   constructor() {
     super();
     this.state = {
-      auth: true, ///
+      auth: false, ///
       completed: 2,
       buffer: 10,
       value: 0,
@@ -65,17 +67,20 @@ class Home extends Component {
   componentDidMount() {
     const token = localStorage.getItem("token");
     const deviceKEY = localStorage.getItem("device");
+    this.props.checkAuthenticated()
     // this.props.token();
     // if(!token && !deviceKEY){
     //   window.location='/auth';
     // }
     this.props.getPosts();
+
   }
   componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
+    console.log(nextProps.auth.auth);
     if (nextProps.auth.auth) {
+
       this.setState({
-        auth: true,
+        auth: nextProps.auth.auth,
       });
     }
     if (nextProps.post.posts) {
@@ -93,11 +98,12 @@ class Home extends Component {
   render() {
     const { auth, completed, buffer, value, posts } = this.state;
     const { classes } = this.props;
-    console.log(auth);
+    // console.log(auth);
 
     const postsList = posts.map((p) => {
       return (
         <PostCard
+          
           key={p.post_id}
           isImg={p.isImage}
           avatar={p.post_by_image}
@@ -120,7 +126,8 @@ class Home extends Component {
     return (
       <div>
         {!auth && (
-          <LinearProgress color="secondary" className={classes.loadingPage} />
+          // <LinearProgress color="primary" className={classes.loadingPage} />
+          <Loading/>
         )}
         {auth && (
           <Grid>
@@ -140,18 +147,23 @@ class Home extends Component {
             {value === 0 && <TabContainer>
               <Grid container spacing={2} className={classes.root}>
                   
-                  <Grid className={classes.msgList} xs={12} lg={4}>
-                    <Paper></Paper>
+                  <Grid item className={classes.msgList} xs={12} lg={3}>
+                    <Paper><Grid>
+                      <Typography variant='subtitle2'>This Paper is on working space</Typography></Grid></Paper>
+                  </Grid>
+
+                  <Grid item xs={12} lg={6}>
+                    <NewPost />
+                    {postsList}
+                    <hr/>
+                  </Grid>
+
+                  <Grid item xs={12} lg={3}>
+                     <CopyRight /> 
                   </Grid>
                 </Grid>
 
-                  <Grid item xs={12} lg={5}>
-                    <NewPost />
-                    {postsList}
-                  </Grid>
-                  <Grid xs={12} lg={3}>
-                     <CopyRight /> 
-                  </Grid>
+
               </TabContainer>}
             {value === 1 && <TabContainer>
               <Messenger/>
@@ -170,30 +182,24 @@ const style = (theme) => ({
   root: {
     flexGrow: 1,
   },
-  loadingPage: {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    right: "0",
-    paddingBottom: "99vh",
-  },
-
   msgList: {},
-  
 });
 
 Home.propType = {
   token: PropType.func.isRequired,
   auth: PropType.object.isRequired,
   getPosts: PropType.func.isRequired,
+  checkAuthenticated:PropType.func.isRequired,
+
 };
 const mapState = (state) => ({
   auth: state.auth,
   post: state.post,
 });
 const mapActionToProps = {
-  token,
+  checkAuthenticated,
   getPosts,
+
 };
 
 export default connect(mapState, mapActionToProps)(withStyles(style)(Home));

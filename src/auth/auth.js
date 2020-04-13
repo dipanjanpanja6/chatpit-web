@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Auth.css";
 import PropType from 'prop-types'
-import {signUp,login,token} from '../redux/action/authaction'
+import {signUp,login,createToken,checkAuthenticated} from '../redux/action/authaction'
 
 import {
   Grid,
@@ -26,13 +26,22 @@ class Auth extends Component {
 
       loginPassword: "",
       loginEmail: "",
+      // auth:false
     };
   }
 componentDidMount(){
 // this.props.token()
+// this.props.checkAuthenticated()
+
 }
 componentWillReceiveProps(nextProps){
   console.log(nextProps);
+  // if (nextProps.auth.auth) {
+    
+  //   this.setState({
+  //     auth: nextProps.auth.auth,
+  //   });
+  // }
 }
 
   handleChangeSignUpUsername = (e) => {
@@ -80,11 +89,13 @@ componentWillReceiveProps(nextProps){
 
   render() {
     const { classes } = this.props;
-
+    // const { auth } = this.state;
+    
     return (
       <div className="App">
+        
         <Grid container className={classes.loginContainer}>
-          <Grid item className={classes.loginGrid} md={4}>
+          <Grid item className={classes.loginGrid} sm={12} md={4}>
             <Paper className={classes.loginPaper}>
               <Typography variant="h4">
                 Be together,
@@ -230,6 +241,7 @@ componentWillReceiveProps(nextProps){
             </Grid>
           </Grid>
         </Grid>
+
       </div>
     );
   }
@@ -272,12 +284,15 @@ const style = (theme) => ({
 Auth.propType={
 signUp:PropType.func.isRequired,
 login:PropType.func.isRequired,
-token:PropType.func.isRequired,
-}
-const mapState=(state)=>{
+createToken:PropType.func.isRequired,
+// auth:PropType.object.isRequired
 
 }
+const mapState=(state)=>({
+// auth:state.auth
+})
 const mapActionsToProps={
-  signUp,login,token
+  signUp,login,createToken,
+  // checkAuthenticated
 }
 export default connect(mapState, mapActionsToProps) (withStyles(style)(Auth));

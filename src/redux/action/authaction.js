@@ -2,6 +2,10 @@ import { SET_LOGIN_SUCCESS, SET_LOGIN_ERROR } from "../type";
 import { url } from "../../config/config";
 import { AUTHORIZATION } from "../type";
 
+const token = localStorage.getItem("token");
+const deviceKEY = localStorage.getItem("device");
+
+
 export const signUp = (data) => (dispatch) => {
   fetch(`http://localhost:4009/signup`, {
     method: "POST",
@@ -11,10 +15,13 @@ export const signUp = (data) => (dispatch) => {
     .then((res) => {
       res.json().then((data) => {
         console.log(data);
-
         localStorage.setItem("token", `Bearer ${data.token}`);
         localStorage.setItem("device", data.device_key);
-        dispatch(token());
+        localStorage.setItem("uid", data.user_id);
+        {data.error && alert(data.message)}
+        {data.success && 
+        dispatch(createToken(data.user_id,data.device_key));}
+        // dispatch(checkAuthenticated());
         data.success && (window.location = "/");
       });
     })
@@ -35,18 +42,17 @@ export const login = (data) => (dispatch) => {
         localStorage.setItem("device", data.device_key);
         localStorage.setItem("uid", data.user_id);
 
-        data.success && dispatch(token(data.user_id, data.device_key));
+        data.success && dispatch(createToken(data.user_id, data.device_key));
         data.success && (window.location = "/");
+        data.error && alert(data.message);
+        
       });
     })
     .catch((error) => {
       console.log(error);
     });
 };
-export const token = (userID, deviceKEY) => (dispatch) => {
-  const deviceKEY = localStorage.getItem("device");
-  const token = localStorage.getItem("token");
-
+export const createToken = (userID, deviceKEY) => (dispatch) => {
   // console.log(deviceKEY);
 
   fetch(`http://localhost:4009/token/create/${userID}/${deviceKEY}`, {
@@ -56,23 +62,11 @@ export const token = (userID, deviceKEY) => (dispatch) => {
       Authorization: token,
     },
   })
-    .then((res) => {
-      if (res.ok) {
-        // window.location='/'
-        dispatch({
-          type: AUTHORIZATION,
-          payload: true,
-        });
-      }
-      if (!res.ok) {
-        console.log("vag");
-        // window.location = "/auth";
-      }
-      res.json().then((data) => {
+    .then((res) => {res.json().then((data) => {
         console.log(data);
         if (data.error) {
-          console.log(data.error);
-          window.location = `/auth`;
+          // console.log(data.error);
+          // window.location = `/auth`;
         }
       });
     })
@@ -80,3 +74,27 @@ export const token = (userID, deviceKEY) => (dispatch) => {
       console.log(error);
     });
 };
+export const checkAuthenticated=()=>(dispatch)=>{
+  fetch(`${url}/authenticated/check`,{
+    method:'GET',
+    headers:{
+      'Content-Type':'application/json',
+      AUTHORIZATION:token
+    }
+  })
+  .then((res)=>{res.json().then((data)=>{
+    console.log(data);
+    if(data.authorized){
+    dispatch({
+      type:AUTHORIZATION,
+      payload:data.authorized
+    })
+  }else{
+    window.location="/auth"
+  }
+  })})
+  .catch((error)=>{
+    console.log(error);
+    
+  })
+}

@@ -11,6 +11,7 @@ export default function (state = initialState, actions) {
         ...state,
         posts:actions.payload
       }
+      
     default:
       return state;
   }

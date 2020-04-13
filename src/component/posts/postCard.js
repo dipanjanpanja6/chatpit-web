@@ -23,13 +23,22 @@ import TagFaces from "@material-ui/icons/TagFaces";
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import PropType from "prop-types";
+import clsx from 'clsx';
 
 class postCard extends Component {
   constructor() {
     super();
+    this.state={
+      expanded:false
+    }
   }
+handleExpandClick = () => {
+  
+    this.setState({...this.state,expanded:!this.state.expanded});
+  };
   render() {
     const { classes,userName,postDate,postImgSrc,postText,avatar,isImg } = this.props;
+    const {expanded} = this.state
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -61,17 +70,17 @@ class postCard extends Component {
             <ShareIcon />
           </IconButton>
           <IconButton
-            // className={clsx(classes.expand, {
-            //   [classes.expandOpen]: expanded,
-            // })}
-            // onClick={handleExpandClick}
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={this.handleExpandClick}
             // aria-expanded={expanded}
             aria-label="show more"
           >
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-        <Collapse in={false} timeout="auto" unmountOnExit>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Comment</Typography>
             {React.createElement(InputBase, {

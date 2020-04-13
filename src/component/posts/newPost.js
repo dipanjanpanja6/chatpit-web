@@ -24,14 +24,14 @@ class NewPost extends Component {
     
     const data = {
       post: this.state.postText,
+      createdAt:new Date().toISOString(),
+      likeCount:0
     };
     this.props.post(data);
   }
   handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
-    console.log
-    (this.state.postText);
-  };
+  } 
   render() {
     const { classes } = this.props;
     const { postText } = this.state;
@@ -44,10 +44,11 @@ class NewPost extends Component {
           value={postText}
           variant="outlined"
           fullWidth
+          multiline rowsMax={4}
           className={classes.postInput}
         />
         <br />
-        <image src="#" />
+        
         <Button onClick={this.handlePost} variant="contained" color="primary">
           submit
         </Button>

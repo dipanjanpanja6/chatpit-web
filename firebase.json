@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "build",
+    "site": "chatpi",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

@@ -5,15 +5,16 @@ import { GET_USER_PROFILE } from "../type";
 const token = localStorage.getItem("token");
 
 
-export const getUserProfile = () => (dispatch) => {
-    const userID = localStorage.getItem('uid')
-  fetch(`${url}/profile/${userID}`, {
+export const getProfile = () => (dispatch) => {
+    // const userID = localStorage.getItem('uid')
+  fetch(`${url}/profile/`, {
     method: "GET",
     headers: { "Content-Type": "application/json", Authorization: token },
   })
     .then((res) =>
       res.json().then((data) => {
         console.log(data);
+
         dispatch({
           type: GET_USER_PROFILE,
           payload: data,

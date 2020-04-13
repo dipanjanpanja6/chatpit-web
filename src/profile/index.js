@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropType from "prop-types";
-import {getUserProfile} from '../redux/action/userAction'
+import {getProfile} from '../redux/action/userAction'
 import {
   Grid,
   Typography,
-  Toolbar,
-  Divider,
   Avatar,
   Paper,
   List,
@@ -20,19 +18,18 @@ class Layout extends Component {
   constructor() {
     super();
     this.state = {
-      userProfile:[]
+      userProfile:""
     };
   }
   componentDidMount(){
-this.props.getUserProfile()
+this.props.getProfile()
   }
   componentWillReceiveProps(nextProps){
-if(nextProps.user.userProfile){
+if(nextProps.user.userProfile.success){
   this.setState({
-    userProfile:nextProps.user.userProfile.data
+    userProfile:nextProps.user.userProfile.user
   })
-  console.log(nextProps.user.userProfile.data);
-  this.state.userProfile.push(nextProps.user.userProfile.data)
+  console.log(nextProps.user.userProfile.user);
 }
 console.log(this.state.userProfile);
 
@@ -75,7 +72,6 @@ console.log(this.state.userProfile);
           <CopyRight />
         </Grid>
 
-          
       </Grid>
     );
   }
@@ -106,14 +102,15 @@ const style = (theme) => ({
 Layout.propType = {
   token: PropType.func.isRequired,
   auth: PropType.object.isRequired,
-  getUserProfile: PropType.func.isRequired,
+  getProfile: PropType.func.isRequired,
+  user:PropType.object.isRequired
 };
 const mapState = (state) => ({
   auth: state.auth,
   user: state.user,
 });
 const mapActionToProps = {
- getUserProfile
+ getProfile
 };
 
 export default connect(mapState,mapActionToProps) (withStyles(style)(Layout));

@@ -6,6 +6,7 @@ const token = localStorage.getItem("token");
 
 
 export const getPosts = () => (dispatch) => {
+  
   fetch(`${url}/posts`, {
     method: "GET",
     headers: { "Content-Type": "application/json", Authorization: token },
@@ -13,6 +14,7 @@ export const getPosts = () => (dispatch) => {
     .then((res) =>
       res.json().then((data) => {
         console.log(data);
+        
         dispatch({
           type: GET_ALL_POST,
           payload: data.posts,
@@ -24,6 +26,7 @@ export const getPosts = () => (dispatch) => {
     });
 };
 export const post = (data) => (dispatch) => {
+
   fetch(`${url}/post`, {
     method: "POST",
     headers: { "Content-Type": "application/json",Authorization: token  },
@@ -31,6 +34,8 @@ export const post = (data) => (dispatch) => {
   }).then((res) =>
     res.json().then((data) => {
       console.log(data);
+
+      // data.success && dispatch(getPosts())
     })
   );
 };
