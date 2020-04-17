@@ -26,15 +26,20 @@ export const getPosts = () => (dispatch) => {
     });
 };
 export const post = (data) => (dispatch) => {
+console.log(data);
+var formdata = new FormData();
+formdata.append("post_image", data.post_image);
+formdata.append("post",data.post );
+formdata.append("isImage", data.isImage);
 
   fetch(`${url}/post`, {
     method: "POST",
-    headers: { "Content-Type": "application/json",Authorization: token  },
-    body: JSON.stringify(data),
+    headers: {Authorization: token  },
+    body: formdata,
   }).then((res) =>
-    res.json().then((data) => {
-      console.log(data);
-
+    res.json().then((d) => {
+      console.log(d);
+      d.success && alert(d.success)
       // data.success && dispatch(getPosts())
     })
   );

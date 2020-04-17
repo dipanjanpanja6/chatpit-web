@@ -24,6 +24,7 @@ import {
   List,
   ListItemText,
   ListItemAvatar,
+  createMuiTheme,
 } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
 
@@ -43,21 +44,22 @@ import PersonPinIcon from "@material-ui/icons/PersonPin";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import HomeIcon from "@material-ui/icons/Home";
 import SendIcon from "@material-ui/icons/Send";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme,ThemeProvider } from "@material-ui/core/styles";
 import HomeChat from "./unAuthChat/homeChat";
 import NewPost from "../component/posts/newPost";
 import PostCard from "../component/posts/postCard";
 import CopyRight from "../component/copyright";
 import Layout from "../profile/index";
 import Messenger from '../home/massegenger/masenger'
-import Loading from '../loading/loading'
+import Loading from '../loading/loading';
+import ImageSlider from '../component/posts/imageSlider'
 
 
 class Home extends Component {
   constructor() {
     super();
     this.state = {
-      auth: false, ///
+      auth: true, ///
       completed: 2,
       buffer: 10,
       value: 0,
@@ -95,6 +97,7 @@ class Home extends Component {
   handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
+  
   render() {
     const { auth, completed, buffer, value, posts } = this.state;
     const { classes } = this.props;
@@ -104,6 +107,7 @@ class Home extends Component {
       return (
         <PostCard
           
+          postID={p.post_id}
           key={p.post_id}
           isImg={p.isImage}
           avatar={p.post_by_image}
@@ -124,12 +128,15 @@ class Home extends Component {
     }
     
     return (
+      
       <div>
         {!auth && (
           // <LinearProgress color="primary" className={classes.loadingPage} />
           <Loading/>
         )}
         {auth && (
+          // <ThemeProvider theme={this.theme}>
+
           <Grid>
             <AppBar position='sticky' color='primary'>
               <Tabs
@@ -147,18 +154,19 @@ class Home extends Component {
             {value === 0 && <TabContainer>
               <Grid container spacing={2} className={classes.root}>
                   
-                  <Grid item className={classes.msgList} xs={12} lg={3}>
-                    <Paper><Grid>
-                      <Typography variant='subtitle2'>This Paper is on working space</Typography></Grid></Paper>
+                  <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
+                    <Paper>
+                    <ImageSlider/>
+                    </Paper>
                   </Grid>
 
-                  <Grid item xs={12} lg={6}>
+                  <Grid item xs={12} md={7} lg={6}>
                     <NewPost />
                     {postsList}
                     <hr/>
                   </Grid>
 
-                  <Grid item xs={12} lg={3}>
+                  <Grid item xs={12} md={12} lg={3}>
                      <CopyRight /> 
                   </Grid>
                 </Grid>
@@ -173,8 +181,10 @@ class Home extends Component {
               </TabContainer>}
             
           </Grid>
+          // </ThemeProvider>
         )}
       </div>
+     
     );
   }
 }

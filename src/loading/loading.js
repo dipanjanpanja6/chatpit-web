@@ -4,7 +4,7 @@ import './index.css'
 export default function Loading(){
 
   return(
-    <>
+    <div class='con'>
     <div class='body'>
       <span>
         <span></span>
@@ -24,6 +24,6 @@ export default function Loading(){
       <span></span>
     </div>
     <h1>Redirecting</h1>
-    </>
+    </div>
   )
 }

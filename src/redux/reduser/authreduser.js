@@ -3,6 +3,7 @@ import { AUTHORIZATION, } from "../type";
 const initialState = {
   auth: false,
   
+  
 };
 
 export default function (state = initialState, actions) {

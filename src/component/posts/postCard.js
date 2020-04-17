@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { url } from "../../config/config";
+
 import {
   withStyles,
   TextField,
@@ -12,7 +14,10 @@ import {
   Collapse,
   Avatar,
   IconButton,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
+import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -23,47 +28,109 @@ import TagFaces from "@material-ui/icons/TagFaces";
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import PropType from "prop-types";
-import clsx from 'clsx';
+import clsx from "clsx"; 
 
 class postCard extends Component {
   constructor() {
     super();
-    this.state={
-      expanded:false
-    }
+    this.state = {
+      expanded: false,
+      anchorEl:null
+    };
   }
-handleExpandClick = () => {
-  
-    this.setState({...this.state,expanded:!this.state.expanded});
+  handleExpandClick = () => {
+    this.setState({ ...this.state, expanded: !this.state.expanded });
   };
+  handleClose = ()=>{
+
+  }
+  handleClick = (event) => {
+    this.setState({anchorEl:event.currentTarget});
+  };
+  
+  handleClose = () => {
+    this.setState({anchorEl:null});
+  };
+  deletePost = ()=>{
+    const token =localStorage.getItem('token');
+   const postID = this.props.postID;
+    fetch(`${url}/post/${postID}/delete`,{
+      method:'DELETE',
+      headers:{'Authorization':token,},
+    }).then(res=>{res.json().then(d=>{
+     d.success && alert(d.message);
+      
+    })}).catch(error=>{console.log(error);
+    })
+    
+  }
   render() {
-    const { classes,userName,postDate,postImgSrc,postText,avatar,isImg } = this.props;
-    const {expanded} = this.state
+    const {
+      classes,
+      userName,
+      postDate,
+      postImgSrc,
+      postText,
+      avatar,
+      isImg,
+    } = this.props;
+    const { expanded,anchorEl } = this.state;
     return (
       <Card className={classes.card}>
         <CardHeader
           avatar={<Avatar src={avatar} className={classes.avatar}></Avatar>}
           action={
-            <IconButton aria-label="settings">
+            <>
+            <IconButton onClick={this.handleClick} aria-label="settings">
               <MoreVertIcon />
             </IconButton>
+            <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={this.handleClose}
+          >
+            <MenuItem onClick={this.handleClose}>Report</MenuItem>
+            <MenuItem onClick={this.deletePost}>Delete Post</MenuItem>
+
+          </Menu>
+            </>
           }
           title={userName}
           subheader={postDate}
         />
-        {isImg && 
-        <CardMedia
-          className={classes.media}
-          image={postImgSrc}
-          title="#"
-        />}
+        {isImg && (
+          <CardMedia className={classes.media} image={postImgSrc} title="#" />
+        )}
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
             {postText}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <AvatarGroup classes={{ avatar: classes.grpAvatar }} max={3}>
+            <Avatar
+              className={classes.grpAvatar}
+              alt="Remy Sharp"
+              src="/static/images/avatar/1.jpg"
+            />
+            <Avatar
+              className={classes.grpAvatar}
+              alt="Travis Howard"
+              src="/static/images/avatar/2.jpg"
+            />
+            <Avatar
+              className={classes.grpAvatar}
+              alt="Cindy Baker"
+              src="/static/images/avatar/3.jpg"
+            />
+            <Avatar
+              className={classes.grpAvatar}
+              alt="Cindy Baker"
+              src="/static/images/avatar/3.jpg"
+            />
+          </AvatarGroup>
+          <IconButton aria-label="share">
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share">
@@ -85,17 +152,20 @@ handleExpandClick = () => {
             <Typography paragraph>Comment</Typography>
             {React.createElement(InputBase, {
               className: classes.input,
-              multiline:true,fullWidth:true,rowsMax:4,
+              multiline: true,
+              fullWidth: true,
+              rowsMax: 4,
               placeholder: "Type a message...",
-              endAdornment: React.createElement(InputAdornment,
-                {position: "end",},
-                React.createElement(IconButton, {
-                   
+              endAdornment: React.createElement(
+                InputAdornment,
+                { position: "end" },
+                React.createElement(
+                  IconButton,
+                  {
                     // button: true
-                },
-                React.createElement(SendIcon,
-                    {className: classes.icon,}
-                    ))
+                  },
+                  React.createElement(SendIcon, { className: classes.icon })
+                )
               ),
             })}
           </CardContent>
@@ -130,30 +200,33 @@ const style = (theme) => ({
   avatar: {
     // backgroundColor: red[500],
   },
+  grpAvatar: {
+    height: theme.spacing(3),
+    width: theme.spacing(3),
+  },
   icon: {
-    color: 'rgb(0, 153, 255)',
+    color: "rgb(0, 153, 255)",
     // width: 35,
     // height: 35,
     padding: 6,
-    '&:not(:first-child)': {
-      marginLeft: 4
-    }
+    "&:not(:first-child)": {
+      marginLeft: 4,
+    },
   },
   input: {
-    flex: 'auto',
+    flex: "auto",
     borderRadius: 30,
     paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    margin: '0 8px',
+    backgroundColor: "rgba(0,0,0,0.04)",
+    margin: "0 8px",
     // height: 36,
-    fontSize: 13
-  }
+    fontSize: 13,
+  },
 });
-postCard.propType={
-  userName:PropType.any.isRequired,
-  postDate:PropType.any.isRequired,
-  postImgSrc:PropType.any.isRequired,
-  postText:PropType.any.isRequired
-
-}
+postCard.propType = {
+  userName: PropType.any.isRequired,
+  postDate: PropType.any.isRequired,
+  postImgSrc: PropType.any.isRequired,
+  postText: PropType.any.isRequired,
+};
 export default withStyles(style)(postCard);
