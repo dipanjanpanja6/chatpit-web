@@ -1,95 +1,45 @@
 import React, { Component } from "react";
-import './home.css'
 import {
-  LinearProgress,
-  Tab,
-  Tabs,
   Grid,
-  AppBar,
   Paper,
-  TabPanel,
   Typography,
-  Box,
-  TextField,
-  Button,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  CardMedia,
-  Collapse,
-  Avatar,
-  IconButton,
-  ListItem,
-  List,
-  ListItemText,
-  ListItemAvatar,
-  createMuiTheme,
 } from "@material-ui/core";
-import SwipeableViews from "react-swipeable-views";
-
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import PropType from "prop-types";
-import { token ,checkAuthenticated} from "../redux/action/authaction";
+
 import { getPosts } from "../redux/action/postAction";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PersonPinIcon from "@material-ui/icons/PersonPin";
-import AddBoxIcon from "@material-ui/icons/AddBox";
-import HomeIcon from "@material-ui/icons/Home";
-import SendIcon from "@material-ui/icons/Send";
-import { makeStyles, useTheme,ThemeProvider } from "@material-ui/core/styles";
-import HomeChat from "./unAuthChat/homeChat";
+
 import NewPost from "../component/posts/newPost";
 import PostCard from "../component/posts/postCard";
+import Skeleton from "../component/posts/sceleton";
 import CopyRight from "../component/copyright";
-import Layout from "../profile/index";
-import Messenger from '../home/massegenger/masenger'
-import Loading from '../loading/loading';
-import ImageSlider from '../component/posts/imageSlider'
-
+import ImageSlider from "../component/posts/imageSlider";
 
 class Home extends Component {
   constructor() {
     super();
     this.state = {
-      auth: true, ///
-      completed: 2,
-      buffer: 10,
-      value: 0,
-      posts: [],
+      posts: null,
     };
   }
   componentDidMount() {
-    const token = localStorage.getItem("token");
-    const deviceKEY = localStorage.getItem("device");
-    this.props.checkAuthenticated()
-    // this.props.token();
-    // if(!token && !deviceKEY){
-    //   window.location='/auth';
-    // }
     this.props.getPosts();
-
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.auth.auth);
-    if (nextProps.auth.auth) {
-
-      this.setState({
-        auth: nextProps.auth.auth,
-      });
+    // console.log(nextProps.auth.auth);
+    if (nextProps.post.newPost.success) {
+      this.props.getPosts();
     }
     if (nextProps.post.posts) {
-      nextProps.post.posts.map((p) => {
-        this.state.posts.push(p);
-      });
+      this.setState({
+        posts:nextProps.post.posts
+      })
     }
+    if(nextProps.post.newPost.success){
+      // this.props.getPosts();
+      }
   }
   handleChange = (event, newValue) => {
     this.setState({ value: newValue });
@@ -97,16 +47,15 @@ class Home extends Component {
   handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
-  
-  render() {
-    const { auth, completed, buffer, value, posts } = this.state;
-    const { classes } = this.props;
-    // console.log(auth);
 
-    const postsList = posts.map((p) => {
+  render() {
+    const { posts } = this.state;
+    const { classes } = this.props;
+
+    const postsList =posts? posts.map((p) => {
       return (
         <PostCard
-          
+        post_uid={p.post_by_uid}
           postID={p.post_id}
           key={p.post_id}
           isImg={p.isImage}
@@ -118,7 +67,7 @@ class Home extends Component {
           likeCount={p.likeCount}
         />
       );
-    });
+    }):<Skeleton/>
     function TabContainer(props) {
       return (
         <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -126,65 +75,25 @@ class Home extends Component {
         </Typography>
       );
     }
-    
+
     return (
-      
-      <div>
-        {!auth && (
-          // <LinearProgress color="primary" className={classes.loadingPage} />
-          <Loading/>
-        )}
-        {auth && (
-          // <ThemeProvider theme={this.theme}>
+      <Grid container spacing={2} className={classes.root}>
+        <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
+          <Paper>
+            <ImageSlider />
+          </Paper>
+        </Grid>
 
-          <Grid>
-            <AppBar position='sticky' color='primary'>
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                indicatorColor="secondary"
-                textColor='inherit'
-                centered
-              >
-                <Tab icon={<HomeIcon />} />
-                <Tab icon={<ForumOutlinedIcon />} />
-                <Tab icon={<AccountCircleIcon />} />
-              </Tabs>
-            </AppBar>
-            {value === 0 && <TabContainer>
-              <Grid container spacing={2} className={classes.root}>
-                  
-                  <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
-                    <Paper>
-                    <ImageSlider/>
-                    </Paper>
-                  </Grid>
+        <Grid item xs={12} md={7} lg={6}>
+          <NewPost />
+          {postsList}
+          <hr />
+        </Grid>
 
-                  <Grid item xs={12} md={7} lg={6}>
-                    <NewPost />
-                    {postsList}
-                    <hr/>
-                  </Grid>
-
-                  <Grid item xs={12} md={12} lg={3}>
-                     <CopyRight /> 
-                  </Grid>
-                </Grid>
-
-
-              </TabContainer>}
-            {value === 1 && <TabContainer>
-              <Messenger/>
-              </TabContainer>}
-            {value === 2 && <TabContainer>
-              <Layout/>
-              </TabContainer>}
-            
-          </Grid>
-          // </ThemeProvider>
-        )}
-      </div>
-     
+        <Grid item xs={12} md={12} lg={3}>
+          <CopyRight />
+        </Grid>
+      </Grid>
     );
   }
 }
@@ -196,20 +105,19 @@ const style = (theme) => ({
 });
 
 Home.propType = {
-  token: PropType.func.isRequired,
-  auth: PropType.object.isRequired,
+  // token: PropType.func.isRequired,
+  // auth: PropType.object.isRequired,
+  post: PropType.object.isRequired,
   getPosts: PropType.func.isRequired,
-  checkAuthenticated:PropType.func.isRequired,
-
+  // checkAuthenticated:PropType.func.isRequired,
 };
 const mapState = (state) => ({
-  auth: state.auth,
+  // auth: state.auth,
   post: state.post,
 });
 const mapActionToProps = {
-  checkAuthenticated,
+  // checkAuthenticated,
   getPosts,
-
 };
 
 export default connect(mapState, mapActionToProps)(withStyles(style)(Home));

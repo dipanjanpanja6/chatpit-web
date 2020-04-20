@@ -1,5 +1,5 @@
 .App {
-  /* text-align: center; */
+  /* text-align: right; */
 }
 /* a{
   padding: 5px 0px;
@@ -9,10 +9,20 @@
   height: 40vmin;
   pointer-events: none;
 } */
-.loginBG{
-  background: url(../img/bg.jpg);
+.loginGrid{
+  background: rgb(2,0,36);
+background: linear-gradient(184deg, rgba(2,0,36,1) 0%, rgba(9,11,121,1) 30%, rgba(0,212,255,1) 100%);
   background-position: center;
   background-size: cover;
+  height: 100vh;
+  min-height: 600px;
+}
+.loginBG{
+  /* background: url(../img/desc.jpg); */
+  background-position: center;
+  height: 100vh;
+  min-height: 600px;
+  /* background-size: cover; */
 }
 .loginHelp p{
   font-size: small;
@@ -20,33 +30,4 @@
 }
 .MuiInputBase-root{
   font-size: .9rem !important;
-}
-@media (prefers-reduced-motion: no-preference) {
-  /* .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  } */
-}
-
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-} */
-
-/* .App-link {
-  color: #61dafb;
-} */
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

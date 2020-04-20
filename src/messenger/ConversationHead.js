@@ -24,13 +24,34 @@ const useStyles = makeStyles(() => ({
   },
   iconBtn: {
     '& svg': {
-      color: 'rgb(0, 153, 255)'
+      // color: '#000'
     }
   }
 }));
 
 const ConversationHead = () => {
   const styles = useStyles();
+  return(
+  
+    <ListItem ContainerComponent='div' ContainerProps={{className: styles.container}} className= {styles.root}>
+  <ListItemAvatar>
+    <Avatar src='https://i.pravatar.cc/300?img=13'/>
+  </ListItemAvatar>
+  <ListItemText primary='Rex3to' secondary='online'/>
+  <ListItemSecondaryAction>
+<IconButton className={styles.iconBtn}>
+  <Phone/>
+</IconButton>
+<IconButton className={styles.iconBtn}>
+  <Videocam/>
+</IconButton>
+<IconButton className={styles.iconBtn}>
+  <Info/>
+</IconButton>
+  </ListItemSecondaryAction>
+</ListItem>
+    
+  )
   return React.createElement(ListItem, {
     ContainerComponent: 'div',
     ContainerProps: {

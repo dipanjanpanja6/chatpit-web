@@ -59,14 +59,15 @@ class NewPost extends Component {
     const { postText, isImg, files } = this.state;
     return (
       <Paper className={classes.postPaper}>
+        <Typography variant="h6">For new post</Typography>
         {isImg && (
         <Image
-          src={files          }
+          src={files}
           imageStyle={{'object-fit': 'cover'}}
           aspectRatio={16/9}
         />
          )} 
-        <Typography variant="h6">For new post</Typography>
+        
         <TextField
           id="postText"
           onChange={this.handleChange}

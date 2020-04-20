@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": "build",
-    "site": "softlik",
+    "site": "chatpitbeta",
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -7,4 +7,11 @@ export const GET_ALL_POST ='GET_ALL_POST'
 
 export const GET_USER_PROFILE ='GET_USER_PROFILE'
 
-export const DARK_MODE ="DARK_MODE"
+export const SET_UPDATE_NAME = "SET_UPDATE_NAME"
+export const NEW_POST = "NEW_POST"
+
+
+
+
+
+export const MODE ="MODE"

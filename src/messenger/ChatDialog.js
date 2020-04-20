@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
 
 const ChatDialog = () => {
   const styles = useStyles();
+
   return React.createElement(Box, {
     p: '16px 30px 12px 10px'
   }, React.createElement(ChatMsg, {

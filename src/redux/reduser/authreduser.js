@@ -1,27 +1,17 @@
-import { AUTHORIZATION, } from "../type";
+import { AUTHORIZATION,MODE} from "../type";
 
 const initialState = {
   auth: false,
-  
-  
+  mode:'light'
 };
 
 export default function (state = initialState, actions) {
   switch (actions.type) {
-    // case SET_LOGIN_SUCCESS:
-    //     return{
-    //         ...state,
-    //         token:actions.payload,
-
-    //         loginLoading:false,
-    //         loginError:null
-    //     }
-    //     case SET_LOGIN_ERROR:
-    //         return{
-    //             ...state,
-    //             loginError:actions.payload
-    //         }
-    
+case MODE:
+  return{
+    ...state,
+    mode:'dark'
+  }
     case AUTHORIZATION:
       return {
         ...state,

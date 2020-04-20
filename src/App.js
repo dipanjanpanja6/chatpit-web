@@ -3,19 +3,20 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 // import AuthChecker from './loading/authCheck'
 import Auth from './auth/auth'
-import Home from './home/home';
-import Massenger from './home/massegenger/masenger'
-import Messenger from './home/massegenger/index'
-import Loading from './loading/loading'
+import Appbar from './appBar/appbar'
 
 import { Provider } from 'react-redux'
 import store from './redux/store'
-import { Paper } from '@material-ui/core';
-
+// import { Paper } from '@material-ui/core';
+import sceleton from './component/posts/sceleton'
+import wel from './auth/login_page_slide'
+import messenger from './home/massegenger/masenger'
+import messengerl from './messenger/main'
 
 function App() {
 
   return (
+    
     <div className="App">
       <Provider store={store}>
        
@@ -23,9 +24,10 @@ function App() {
 
           {/* <Route exact path="/authChecker" component={AuthChecker} /> */}
 
-          <Route exact path="/test" component={Loading} />
+          <Route exact path="/testl" component={messengerl} />
+          <Route exact path="/test" component={messenger} />
           <Route exact path="/auth" component={Auth} />
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Appbar} />
           {/* <Route exact path="/" component={Navigation} /> */}
 
 

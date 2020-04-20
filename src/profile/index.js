@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropType from "prop-types";
-import { getProfile,updateName,updateDp } from "../redux/action/userAction";
+import { getProfile } from "../redux/action/userAction";
 import {
   Grid,
   Typography,
@@ -13,6 +13,7 @@ import {
   ListItemText,
   Collapse,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import withStyles from "@material-ui/core/styles/withStyles";
 import CopyRight from "../component/copyright";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -22,36 +23,71 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
 import PostCard from "../component/posts/postCard";
 import NewPost from "../component/posts/newPost";
+import Sceleton from "../component/posts/sceleton";
+
 import DialogFrom from "../component/Dialog";
 import DialogFile from "../component/Dialog File";
-import {ThemeProvider } from "@material-ui/core/styles";
-import {createMuiTheme} from "@material-ui/core";
+import { url } from "../config/config";
+
+const token = localStorage.getItem("token");
 
 class Layout extends Component {
   constructor() {
     super();
     this.state = {
-      
       userProfile: "",
       open: false,
       openDialog: false,
       openDialogF: false,
-      title:'',content:'',label:''
+      title: "",
+      content: "",
+      label: "",
+      posts: null,
     };
   }
-  componentDidMount() {
+  getPost = () => {
+    fetch(`${url}/profile/posts`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json", Authorization: token },
+    })
+      .then((res) =>
+        res.json().then((data) => {
+          console.log(data);
+          if (data.success) {
+            this.setState({
+              posts: data.data,
+            });
+          }
+          if (data.error) {
+            this.setState({
+              posts: [],
+            });
+          }
+        })
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  componentWillMount() {
     this.props.getProfile();
+    this.getPost();
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user.userProfile.success) {
+    if (nextProps.post.newPost.success) {
+      this.getPost();
+    }
+    if (nextProps.post.newPost.error) {
+      alert(nextProps.post.newPost.message);
+    }
+    if (nextProps.user.userProfile) {
       this.setState({
         userProfile: nextProps.user.userProfile.user,
       });
-      console.log(nextProps.user.userProfile.user);
     }
-    console.log(this.state.userProfile);
   }
   signOut = () => {
     localStorage.clear();
@@ -62,25 +98,67 @@ class Layout extends Component {
   };
   updateName = () => {
     this.setState({
-      title:'Update username',content:"Enter a unique username and don't use any real information",label:'please enter username'
-    })
-    this.handelOpen()
+      title: "Update username",
+      content: "Enter a unique username and don't use any real information",
+      label: "please enter username",
+    });
+    this.handelOpen();
   };
-  updateNamee=(data)=>{
-let d={name:data}
-this.props.updateName(d);
+  updateNamee = (data) => {
+    let d = { name: data };
 
-
-  }
+    fetch(`${url}/profile/update/name`, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(d),
+    }).then((res) => {
+      res.json().then((data) => {
+        console.log(data);
+        if (data.success) {
+          this.props.getProfile();
+        }
+        if (data.error) {
+          alert(data.message);
+        }
+      });
+    });
+  };
   updateDp = () => {
     this.setState({
-      title:'Update Profile Picture',content:'Image should be less then 5MB',label:''
-    })
-    this.handelOpenDF()
+      title: "Update Profile Picture",
+      content: "Image should be less then 5MB",
+      label: "",
+    });
+    this.handelOpenDF();
   };
-  updateDpp = (data)=>{   
-    this.props.updateDp(data)
-  }
+  updateDpp = (data) => {
+    var formdata = new FormData();
+    formdata.append("profile_image", data);
+
+    fetch(`${url}/profile/update/image`, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+      },
+      body: formdata,
+    })
+      .then((res) =>
+        res.json().then((d) => {
+          if (d.success) {
+            this.props.getProfile();
+          }
+          if (d.error) {
+            alert(d.message);
+          }
+          console.log(d);
+        })
+      )
+
+      .catch((error) => console.log("error", error));
+  };
   handelOpen = () => {
     this.setState({
       openDialog: true,
@@ -93,34 +171,48 @@ this.props.updateName(d);
   };
   handleClose = () => {
     this.setState({
-      openDialog:false,
-      openDialogF:false
-    })
+      openDialog: false,
+      openDialogF: false,
+    });
   };
-  
-  mode=()=>{
-    
-    
-  }
+
+  mode = () => {};
   render() {
     const { classes } = this.props;
-    const { userProfile, open, openDialog,openDialogF,title,content,label } = this.state;
-    // const postsList = posts.map((p) => {
-    //   return (
-    //     <PostCard
-    //       key={p.post_id}
-    //       isImg={p.isImage}
-    //       avatar={p.post_by_image}
-    //       userName={p.post_by_name}
-    //       postDate={p.createdAt}
-    //       postImgSrc={p.image_link}
-    //       postText={p.post}
-    //       likeCount={p.likeCount}
-    //     />
-    //   );
-    // });
+    const {
+      userProfile,
+      open,
+      openDialog,
+      openDialogF,
+      title,
+      content,
+      label,
+      posts,
+    } = this.state;
+    console.log(posts);
+
+    const postsList = posts ? (
+      posts.map((p) => {
+        return (
+          <PostCard
+          post_uid={p.post_by_uid}
+            postID={p.post_id}
+            key={p.post_id}
+            isImg={p.isImage}
+            avatar={p.post_by_image}
+            userName={p.post_by_name}
+            postDate={p.createdAt}
+            postImgSrc={p.image_link}
+            postText={p.post}
+            likeCount={p.likeCount}
+          />
+        );
+      })
+    ) : (
+      <Sceleton />
+    );
+
     return (
-      
       <Grid container spacing={2} className={classes.root}>
         <Grid className={classes.msgList} xs={12} md={3}>
           <List>
@@ -176,43 +268,77 @@ this.props.updateName(d);
 
         <Grid item xs={12} md={6}>
           <Paper className={classes.paper}>
-            <Avatar src={userProfile.userImage} className={classes.avatar} />
-            <Grid item>
-              <Typography align="center" className={classes.title} variant="h4">
-                {userProfile.name}
-              </Typography>
-              <Typography
-                align="center"
-                color="textSecondary"
-                className={classes.subTitle}
-                variant="subtitle1"
-              >
-                I'm 20 years old
-              </Typography>
-              <Typography
-                align="center"
-                color="textSecondary"
-                className={classes.subTitle}
-                variant="subtitle2"
-              >
-                {userProfile.email}
-              </Typography>
+            {userProfile ? (
+              <Avatar src={userProfile.userImage} className={classes.avatar} />
+            ) : (
+              <Skeleton variant="circle" className={classes.avatar} />
+            )}
+            <Grid item className={classes.subTitle}>
+              {userProfile ? (
+                <>
+                  <Typography
+                    align="center"
+                    className={classes.title}
+                    variant="h4"
+                  >
+                    {" "}
+                    {userProfile.name}
+                  </Typography>
+                  <Typography
+                    align="center"
+                    color="textSecondary"
+                    variant="subtitle1"
+                  >
+                    I'm 20 years old
+                  </Typography>
+                  <Typography
+                    align="center"
+                    color="textSecondary"
+                    variant="subtitle2"
+                  >
+                    {userProfile.email}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Skeleton width="20%" className={classes.title} />
+                  <Skeleton width="30%" />
+                  <Skeleton width="40%" />
+                  <Skeleton width="30%" />
+                </>
+              )}
+
               <br />
             </Grid>
           </Paper>
           <br />
           <NewPost />
-          {/* {postsList} */}
+          {postsList}
         </Grid>
 
         <Grid item xs={12} md={3}>
           <CopyRight />
         </Grid>
 
-        <DialogFrom key='1' title={title} content={content} label={label} handleClose={this.handleClose} od={openDialog} e={this.updateNamee} />
-        <DialogFile key="2" title={title} content={content} label={label} handleClose={this.handleClose} odf={openDialogF} e={this.updateDpp} />
+        <DialogFrom
+          key="1"
+          title={title}
+          content={content}
+          label={label}
+          handleClose={this.handleClose}
+          od={openDialog}
+          e={this.updateNamee}
+        />
+        <DialogFile
+          key="2"
+          title={title}
+          content={content}
+          label={label}
+          handleClose={this.handleClose}
+          odf={openDialogF}
+          e={this.updateDpp}
+        />
       </Grid>
-      
     );
   }
 }
@@ -227,7 +353,7 @@ const style = (theme) => ({
   title: {
     paddingTop: "20px",
   },
-  subTitle: {},
+  subTitle: { textAlign: "-webkit-center" },
   avatar: {
     width: theme.spacing(25),
     height: theme.spacing(25),
@@ -241,19 +367,18 @@ const style = (theme) => ({
 });
 
 Layout.propType = {
-  token: PropType.func.isRequired,
-  auth: PropType.object.isRequired,
+  // token: PropType.func.isRequired,
+  post: PropType.object.isRequired,
   getProfile: PropType.func.isRequired,
   user: PropType.object.isRequired,
-  updateName:PropType.func.isRequired,
-  updateDp:PropType.func.isRequired
 };
 const mapState = (state) => ({
-  auth: state.auth,
+  // auth: state.auth,
   user: state.user,
+  post: state.post,
 });
 const mapActionToProps = {
-  getProfile,updateName,updateDp
+  getProfile,
 };
 
 export default connect(mapState, mapActionToProps)(withStyles(style)(Layout));

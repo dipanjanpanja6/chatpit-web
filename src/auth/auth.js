@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Auth.css";
 import PropType from 'prop-types'
 import {signUp,login,createToken,checkAuthenticated} from '../redux/action/authaction'
-
+import Image from 'material-ui-image';
 import {
   Grid,
   Paper,
@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
+import Slide from './login_page_slide'
 
 class Auth extends Component {
   constructor() {
@@ -95,7 +96,7 @@ componentWillReceiveProps(nextProps){
       <div className="App">
         
         <Grid container className={classes.loginContainer}>
-          <Grid item className={classes.loginGrid} sm={12} md={4}>
+          <Grid item className='loginGrid' xs={12} sm={5} md={4}>
             <Paper className={classes.loginPaper}>
               <Typography variant="h4">
                 Be together,
@@ -221,24 +222,9 @@ componentWillReceiveProps(nextProps){
             </Paper>
           </Grid>
 
-          <Grid className="loginBG" md={8}>
-            <Grid className={classes.loginB}>
-              <Typography variant="h2">Welcome to xxx</Typography>
-              <Typography variant="subtitle1">
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum is that it has a more-or-less
-                normal distribution of letters, as opposed to using 'Content
-                here, content here', making it look like readable English. Many
-                desktop publishing packages and web page editors now use Lorem
-                Ipsum as their default model text, and a search for 'lorem
-                ipsum' will uncover many web sites still in their infancy.
-                Various versions have evolved over the years, sometimes by
-                accident, sometimes on purpose (injected humour and the like).
-              </Typography>
-              <input />
-              <input type="submit" />
-            </Grid>
+          <Grid className="loginBG" xs={12} sm={7} md={8}>
+            <Slide/>
+            
           </Grid>
         </Grid>
 
@@ -248,33 +234,20 @@ componentWillReceiveProps(nextProps){
 }
 
 const style = (theme) => ({
-  loginContainer: {
-    // height: "100vh",
-  },
-  span: {
-    backgroundColor: "#445",
-    // height: "100vh",
-    width: "100%",
-  },
+
   loginPaper: {
     display: "flex",
     flexDirection: "column",
     padding: theme.spacing(2),
-    margin: "12vh 12px",
+    margin: "12vh 12px auto",
+    // maxHeight:'100vh'
   },
   button: {
     marginTop: "12px",
   },
   from: {
     margin: "20px 0px",
-  },
-  loginGrid: {
-    backgroundColor: "#099",
-    height: "100vh",
-  },
-  loginBG: {
-    background: "url('./src/img/bg.jpg')",
-    height: "100vh",
+    maxHeight:'90vh',
   },
   loginB: {
     padding: "20px",

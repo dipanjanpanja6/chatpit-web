@@ -110,7 +110,7 @@ const MessengerDemo = () => {
   const styles = useStyles();
   return (
     <Box
-      height={'calc(100vh - 75px)'}
+      height={'calc(100vh)'}
       display={'flex'}
       flexDirection={'column'}
       overflow={'hidden'}
@@ -124,7 +124,7 @@ const MessengerDemo = () => {
                 <ConversationHead />
               </Toolbar>
             </Header>
-            <Sidebar>
+            {/* <Sidebar>
               {collapsed ? (
                 <Box textAlign={'center'} my={1}>
                   <IconButton className={styles.edit}>
@@ -140,18 +140,18 @@ const MessengerDemo = () => {
                 </>
               )}
               <ChatList concise={collapsed} />
-            </Sidebar>
+            </Sidebar> */}
             <InsetContainer className={styles.contentContainer}>
               <Content className={styles.content}>
                 <ChatDialog />
               </Content>
-              <SecondaryInsetSidebar
+              {/* <SecondaryInsetSidebar
                 className={styles.insetSidebar}
                 BodyProps={{ className: styles.insetBody }}
                 PaperProps={{ classes: { root: styles.insetDrawerPaper } }}
               >
                 <ChatSettings />
-              </SecondaryInsetSidebar>
+              </SecondaryInsetSidebar> */}
             </InsetContainer>
             <InsetContainer>
               <Footer className={styles.footer}>

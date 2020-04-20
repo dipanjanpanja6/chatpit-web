@@ -1,7 +1,8 @@
-import {GET_ALL_POST } from "../type";
+import {GET_ALL_POST,NEW_POST } from "../type";
 
 const initialState = {
-  posts:null
+  posts:null,
+  newPost:{}
 };
 
 export default function (state = initialState, actions) {
@@ -11,7 +12,11 @@ export default function (state = initialState, actions) {
         ...state,
         posts:actions.payload
       }
-      
+      case NEW_POST:
+        return{
+          ...state,
+          newPost:actions.payload
+        }
     default:
       return state;
   }

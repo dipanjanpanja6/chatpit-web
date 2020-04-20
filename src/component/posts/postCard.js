@@ -33,9 +33,11 @@ import clsx from "clsx";
 class postCard extends Component {
   constructor() {
     super();
+    this.uid=localStorage.getItem('uid')
     this.state = {
       expanded: false,
-      anchorEl:null
+      anchorEl:null,
+      deletepost:false
     };
   }
   handleExpandClick = () => {
@@ -58,7 +60,10 @@ class postCard extends Component {
       method:'DELETE',
       headers:{'Authorization':token,},
     }).then(res=>{res.json().then(d=>{
-     d.success && alert(d.message);
+     d.success && this.setState({deletepost:true})
+     d.error && alert(d.message)
+      console.log(d);
+      
       
     })}).catch(error=>{console.log(error);
     })
@@ -73,10 +78,13 @@ class postCard extends Component {
       postText,
       avatar,
       isImg,
+      post_uid
     } = this.props;
-    const { expanded,anchorEl } = this.state;
+    const { expanded, anchorEl, deletepost } = this.state;
     return (
-      <Card className={classes.card}>
+      <>
+  {!deletepost && 
+    <Card className={classes.card}>
         <CardHeader
           avatar={<Avatar src={avatar} className={classes.avatar}></Avatar>}
           action={
@@ -91,7 +99,7 @@ class postCard extends Component {
             onClose={this.handleClose}
           >
             <MenuItem onClick={this.handleClose}>Report</MenuItem>
-            <MenuItem onClick={this.deletePost}>Delete Post</MenuItem>
+            {this.uid===post_uid && <MenuItem onClick={this.deletePost}>Delete Post</MenuItem>}
 
           </Menu>
             </>
@@ -112,22 +120,22 @@ class postCard extends Component {
             <Avatar
               className={classes.grpAvatar}
               alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              src={avatar}
             />
             <Avatar
               className={classes.grpAvatar}
               alt="Travis Howard"
-              src="/static/images/avatar/2.jpg"
+              src={avatar}
             />
             <Avatar
               className={classes.grpAvatar}
               alt="Cindy Baker"
-              src="/static/images/avatar/3.jpg"
+              src={avatar}
             />
             <Avatar
               className={classes.grpAvatar}
               alt="Cindy Baker"
-              src="/static/images/avatar/3.jpg"
+              src={avatar}
             />
           </AvatarGroup>
           <IconButton aria-label="share">
@@ -162,7 +170,7 @@ class postCard extends Component {
                 React.createElement(
                   IconButton,
                   {
-                    // button: true
+                    button: true
                   },
                   React.createElement(SendIcon, { className: classes.icon })
                 )
@@ -171,6 +179,8 @@ class postCard extends Component {
           </CardContent>
         </Collapse>
       </Card>
+  }
+  </>
     );
   }
 }

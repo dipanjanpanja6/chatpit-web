@@ -9,13 +9,14 @@ import Edit from '@material-ui/icons/Edit';
 const useStyles = makeStyles(() => ({
   middle: {
     flex: 'auto',
-    marginLeft: 16
+    marginLeft: 16,
+    marginRight: 16
   },
   iconBtn: {
-    padding: 8,
+    padding: 5,
     backgroundColor: 'rgba(0, 0, 0, .04)',
     '&:not(:last-child)': {
-      marginRight: 16
+      marginRight: 5
     }
   }
 }));
