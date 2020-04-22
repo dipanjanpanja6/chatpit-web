@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./appBar.css";
 import { Tab, Tabs, Grid, AppBar, Typography } from "@material-ui/core";
 import {
   createMuiTheme,
@@ -22,6 +21,7 @@ import Home from "../home/home";
 import Layout from "../profile/index";
 import Messenger from "../home/massegenger/index";
 import Loading from "../loading/loading";
+import { yellow } from "@material-ui/core/colors";
 
 class appBar extends Component {
   constructor() {
@@ -67,8 +67,17 @@ class appBar extends Component {
     return (
       <ThemeProvider
         theme={createMuiTheme({
+          
+          // overrides: { MuiAppBar: {default: "#FFC0CB"  } }, palette: { type: "dark" } ,
           palette: {
             type: this.state.mode,
+            primary: {
+              main: '#fdd835',
+            },
+            secondary: {
+              main: '#ffb300',
+            },
+            type:'light'
           },
         })}
       >
@@ -76,7 +85,7 @@ class appBar extends Component {
           {!auth && <Loading />}
           {auth && (
             <Grid>
-              <AppBar position="sticky" color="primary">
+              <AppBar position="sticky" color='primary'>
                 <Tabs
                   value={value}
                   onChange={this.handleChange}

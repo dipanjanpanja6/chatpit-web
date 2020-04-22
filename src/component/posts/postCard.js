@@ -60,8 +60,6 @@ class postCard extends Component {
     })
       .then((res) => {
         res.json().then((d) => {
-          console.log(d);
-
           this.setState(d);
         });
       })
@@ -286,7 +284,7 @@ class postCard extends Component {
                         style: { padding: 0 },
                         button: true,
                       },
-                      React.createElement(SendIcon, { className: classes.icon })
+                      React.createElement(SendIcon, { className: classes.icon ,color:'secondary',})
                     )
                   )}
                 ></InputBase>
@@ -294,7 +292,6 @@ class postCard extends Component {
             </Collapse>
           </Card>
         )}
-         {/* <ToastContainer /> */}
       </>
     );
   }
@@ -343,9 +340,6 @@ const style = (theme) => ({
     width: theme.spacing(3),
   },
   icon: {
-    color: "rgb(0, 153, 255)",
-    // width: 35,
-    // height: 35,
     padding: 6,
     "&:not(:first-child)": {
       marginLeft: 4,

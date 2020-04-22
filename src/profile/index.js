@@ -200,7 +200,7 @@ class Layout extends Component {
       label,
       posts,
     } = this.state;
-    console.log(posts);
+    
 
     const postsList = posts ? (
       posts.map((p) => {

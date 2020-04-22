@@ -28,7 +28,7 @@ class NewPost extends Component {
   }
   componentDidMount() {}
   componentWillReceiveProps(p){
-console.log(p.posts.post);
+// console.log(p.posts.post);
 if(p.posts.post.newPost){
   p.posts.post.newPost.error &&  toast.error(p.posts.post.newPost.message);
   p.posts.post.newPost.success &&  toast.success(p.posts.post.newPost.message);
@@ -94,7 +94,7 @@ if(p.posts.post.newPost){
         />
         <br />
 
-        <Button onClick={this.handlePost} variant="contained" color="primary">
+        <Button onClick={this.handlePost} variant="contained" color="secondary">
           submit
         </Button>
         <IconButton onClick={this.addPicture}>
