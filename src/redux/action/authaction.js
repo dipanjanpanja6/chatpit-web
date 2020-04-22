@@ -7,7 +7,7 @@ const deviceKEY = localStorage.getItem("device");
 
 
 export const signUp = (data) => (dispatch) => {
-  fetch(`http://localhost:4009/signup`, {
+  fetch(`${url}/signup`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
