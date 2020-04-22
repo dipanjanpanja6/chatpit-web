@@ -35,13 +35,7 @@ const ChatBar = ({
   const styles = useStyles();
   return React.createElement(React.Fragment, null, React.createElement(AddCircle, {
     className: styles.icon
-  }), !concise && React.createElement(React.Fragment, null, React.createElement(Gif, {
-    className: styles.icon
-  }), React.createElement(Note, {
-    className: styles.icon
-  }), React.createElement(Image, {
-    className: styles.icon
-  })), React.createElement(InputBase, {
+  }),  React.createElement(InputBase, {
     className: styles.input,
     placeholder: 'Type a message...',
     endAdornment: React.createElement(InputAdornment, {

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { url } from "../../config/config";
-
+import { toast } from 'react-toastify';
 import {
   withStyles,
   TextField,
+  ListItemText,
   Typography,
   Button,
   Card,
@@ -15,60 +16,157 @@ import {
   Avatar,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  Input,
+  Paper,
+  Grid,
 } from "@material-ui/core";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { red } from "@material-ui/core/colors";
 import SendIcon from "@material-ui/icons/Send";
-import TagFaces from "@material-ui/icons/TagFaces";
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import PropType from "prop-types";
-import clsx from "clsx"; 
+import clsx from "clsx";
+import SkeletonC from "./SkeletonCmnt";
+import Alert from "@material-ui/lab/Alert";
+
+const token = localStorage.getItem("token");
 
 class postCard extends Component {
   constructor() {
     super();
-    this.uid=localStorage.getItem('uid')
+    this.uid = localStorage.getItem("uid");
     this.state = {
       expanded: false,
-      anchorEl:null,
-      deletepost:false
+      anchorEl: null,
+      cmnt: "",
+      deletepost: false,
+      liked: false,
+      likeCount: 0,
+      allCmnt: null,
     };
   }
+  
+  componentDidMount = () => {
+    this.setState({ likeCount: this.props.likeCount });
+    const postID = this.props.postID;
+    fetch(`${url}/post/${postID}/check/like`, {
+      method: "GET",
+      headers: { AUTHORIZATION: token },
+    })
+      .then((res) => {
+        res.json().then((d) => {
+          console.log(d);
+
+          this.setState(d);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  getComment = () => {
+    const postID = this.props.postID;
+    fetch(`${url}/post/${postID}/comments`, {
+      method: "GET",
+      headers: { AUTHORIZATION: token },
+    })
+      .then((res) => {
+        res.json().then((d) => {
+          console.log(d);
+          d.success && this.setState({ allCmnt: d.data });
+          d.error && this.setState({ allCmnt: [] });
+        });
+      })
+      .catch((err) => console.log(err));
+  };
   handleExpandClick = () => {
     this.setState({ ...this.state, expanded: !this.state.expanded });
+    !this.state.expanded && this.getComment();
   };
-  handleClose = ()=>{
+  handleClick = (event) => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+  deletePost = () => {
+
+    const token = localStorage.getItem("token");
+    const postID = this.props.postID;
+    fetch(`${url}/post/${postID}/delete`, {
+      method: "DELETE",
+      headers: { Authorization: token },
+    })
+      .then((res) => {
+        res.json().then((d) => {
+          d.success && toast.warn("Post deleted successfully")
+          d.success && this.setState({ deletepost: true });
+          d.error && toast.warn(d.message)
+          console.log(d);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  reportPost=()=>{
+    toast.warn("Report currently not working")
+    this.handleClose()
 
   }
-  handleClick = (event) => {
-    this.setState({anchorEl:event.currentTarget});
+  handleCmntChnge = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
   };
-  
-  handleClose = () => {
-    this.setState({anchorEl:null});
+  like = () => {
+    if (this.state.liked) {
+      this.setState({ likeCount: this.state.likeCount - 1 });
+    }
+    if (!this.state.liked) {
+      this.setState({ likeCount: this.state.likeCount + 1 });
+    }
+    this.setState({ liked: !this.state.liked });
+    const postID = this.props.postID;
+
+    fetch(`${url}/post/${postID}/like`, {
+      method: "POST",
+      headers: { AUTHORIZATION: token },
+    }).then((res) => {
+      res.json().then((d) => {
+        console.log(d);
+        d.error && this.setState({ liked: false });
+        d.error && toast.warn(d.message)
+      });
+    });
   };
-  deletePost = ()=>{
-    const token =localStorage.getItem('token');
-   const postID = this.props.postID;
-    fetch(`${url}/post/${postID}/delete`,{
-      method:'DELETE',
-      headers:{'Authorization':token,},
-    }).then(res=>{res.json().then(d=>{
-     d.success && this.setState({deletepost:true})
-     d.error && alert(d.message)
-      console.log(d);
-      
-      
-    })}).catch(error=>{console.log(error);
+  cmntSend = () => {
+    var data = {
+      comment: this.state.cmnt,
+    };
+    const postID = this.props.postID;
+
+    fetch(`${url}/post/${postID}/comment`, {
+      method: "POST",
+      headers: { Authorization: token, "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     })
-    
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          this.setState({ cmnt: "" });
+          this.getComment();
   }
+  result.error && toast.warn(result.message)
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   render() {
     const {
       classes,
@@ -78,113 +176,143 @@ class postCard extends Component {
       postText,
       avatar,
       isImg,
-      post_uid
+      post_uid,
     } = this.props;
-    const { expanded, anchorEl, deletepost } = this.state;
+    const {
+      expanded,
+      anchorEl,
+      deletepost,
+      cmnt,
+      liked,
+      likeCount,
+      allCmnt,
+    } = this.state;
+    const AllCmnt = allCmnt ? (
+      allCmnt.map((p) => {
+        return (
+          <Grid className={classes.commentG} container justify="flex-start">
+            <Avatar className={classes.small} src={p.comment_by_userImage} />
+            <Paper className={classes.commentP}>
+              <ListItemText
+                primary={p.comment_by_userName}
+                secondary={p.comment}
+              />
+            </Paper>
+          </Grid>
+        );
+      })
+    ) : (
+      <SkeletonC />
+    );
     return (
       <>
-  {!deletepost && 
-    <Card className={classes.card}>
-        <CardHeader
-          avatar={<Avatar src={avatar} className={classes.avatar}></Avatar>}
-          action={
-            <>
-            <IconButton onClick={this.handleClick} aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={this.handleClose}
-          >
-            <MenuItem onClick={this.handleClose}>Report</MenuItem>
-            {this.uid===post_uid && <MenuItem onClick={this.deletePost}>Delete Post</MenuItem>}
-
-          </Menu>
-            </>
-          }
-          title={userName}
-          subheader={postDate}
-        />
-        {isImg && (
-          <CardMedia className={classes.media} image={postImgSrc} title="#" />
+        {!deletepost && (
+          <Card className={classes.card}>
+            <CardHeader
+              avatar={<Avatar src={avatar} className={classes.avatar}></Avatar>}
+              action={
+                <>
+                  <IconButton onClick={this.handleClick} aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+                  >
+                    <MenuItem onClick={this.reportPost}>Report</MenuItem>
+                    {this.uid === post_uid && (
+                      <MenuItem onClick={this.deletePost}>Delete Post</MenuItem>
+                    )}
+                  </Menu>
+                </>
+              }
+              title={userName}
+              subheader={postDate}
+            />
+            {isImg && (
+              <CardMedia
+                className={classes.media}
+                image={postImgSrc}
+                title="#"
+              />
+            )}
+            <CardContent>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {postText}
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+              <Typography>{likeCount}</Typography>
+              <IconButton onClick={this.like}>
+                {liked && <FavoriteIcon color="error" />}
+                {!liked && <FavoriteIcon />}
+              </IconButton>
+              <IconButton aria-label="share">
+                <ShareIcon />
+              </IconButton>
+              <IconButton
+                className={clsx(classes.expand, {
+                  [classes.expandOpen]: expanded,
+                })}
+                onClick={this.handleExpandClick}
+                // aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                <Typography paragraph>Comments</Typography>
+                {AllCmnt}
+                <InputBase
+                  className={classes.input}
+                  onChange={this.handleCmntChnge}
+                  value={cmnt}
+                  multiline={true}
+                  fullWidth={true}
+                  rowsMax={4}
+                  id="cmnt"
+                  placeholder="Type a message..."
+                  endAdornment={React.createElement(
+                    InputAdornment,
+                    { position: "end" },
+                    React.createElement(
+                      IconButton,
+                      {
+                        onClick: this.cmntSend,
+                        style: { padding: 0 },
+                        button: true,
+                      },
+                      React.createElement(SendIcon, { className: classes.icon })
+                    )
+                  )}
+                ></InputBase>
+              </CardContent>
+            </Collapse>
+          </Card>
         )}
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {postText}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <AvatarGroup classes={{ avatar: classes.grpAvatar }} max={3}>
-            <Avatar
-              className={classes.grpAvatar}
-              alt="Remy Sharp"
-              src={avatar}
-            />
-            <Avatar
-              className={classes.grpAvatar}
-              alt="Travis Howard"
-              src={avatar}
-            />
-            <Avatar
-              className={classes.grpAvatar}
-              alt="Cindy Baker"
-              src={avatar}
-            />
-            <Avatar
-              className={classes.grpAvatar}
-              alt="Cindy Baker"
-              src={avatar}
-            />
-          </AvatarGroup>
-          <IconButton aria-label="share">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={this.handleExpandClick}
-            // aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>Comment</Typography>
-            {React.createElement(InputBase, {
-              className: classes.input,
-              multiline: true,
-              fullWidth: true,
-              rowsMax: 4,
-              placeholder: "Type a message...",
-              endAdornment: React.createElement(
-                InputAdornment,
-                { position: "end" },
-                React.createElement(
-                  IconButton,
-                  {
-                    button: true
-                  },
-                  React.createElement(SendIcon, { className: classes.icon })
-                )
-              ),
-            })}
-          </CardContent>
-        </Collapse>
-      </Card>
-  }
-  </>
+         {/* <ToastContainer /> */}
+      </>
     );
   }
 }
 const style = (theme) => ({
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    marginBottom: "12px",
+  },
+  commentG: {
+    margin: "12px",
+  },
+  commentP: {
+    padding: "1px 12px",
+    marginLeft: "12px",
+    marginRight: "12px",
+  },
   card: {
     // padding: theme.spacing(2),
     marginTop: theme.spacing(2),

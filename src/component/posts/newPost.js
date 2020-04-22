@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Paper,
   Typography,
@@ -9,7 +11,7 @@ import {
 import Image from 'material-ui-image';
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { post } from "../../redux/action/postAction";
+import { post,postNull } from "../../redux/action/postAction";
 import PropType from "prop-types";
 import { connect } from "react-redux";
 import DialogFile from "../Dialog File";
@@ -25,7 +27,18 @@ class NewPost extends Component {
     };
   }
   componentDidMount() {}
-  handlePost = async () => {
+  componentWillReceiveProps(p){
+console.log(p.posts.post);
+if(p.posts.post.newPost){
+  p.posts.post.newPost.error &&  toast.error(p.posts.post.newPost.message);
+  p.posts.post.newPost.success &&  toast.success(p.posts.post.newPost.message);
+  p.posts.post.newPost.success &&  this.setState({postText:''});
+  p.posts.post.newPost.success &&  this.props.postNull();
+  
+}
+
+  }
+  handlePost = () => {
     const data = {
       post_image: this.state.postImage,
       post: this.state.postText,
@@ -46,7 +59,7 @@ class NewPost extends Component {
       postImage: i,
       isImg: true,
     });
-    console.log(this.state);
+    // console.log(this.state);
     // console.log(i);
   };
 
@@ -58,6 +71,7 @@ class NewPost extends Component {
     const { classes } = this.props;
     const { postText, isImg, files } = this.state;
     return (
+      <>
       <Paper className={classes.postPaper}>
         <Typography variant="h6">For new post</Typography>
         {isImg && (
@@ -93,6 +107,7 @@ class NewPost extends Component {
           onChange: this.k,
         })}
       </Paper>
+</>
     );
   }
 }
@@ -110,10 +125,15 @@ const style = (theme) => ({
 
 NewPost.propType = {
   post: PropType.func.isRequired,
+  postNull: PropType.func.isRequired,
+  posts: PropType.object.isRequired,
+  
 };
-const mapState = (state) => ({});
+const mapState = (state) => ({
+  posts:state
+});
 const mapActionToProps = {
-  post,
+  post,postNull
 };
 
 export default connect(mapState, mapActionToProps)(withStyles(style)(NewPost));

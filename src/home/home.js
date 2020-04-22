@@ -29,17 +29,16 @@ class Home extends Component {
   }
   componentWillReceiveProps(nextProps) {
     // console.log(nextProps.auth.auth);
-    if (nextProps.post.newPost.success) {
-      this.props.getPosts();
-    }
+    // if (nextProps.post.newPost) {
+    //   console.log(nextProps.post.newPost);
+      
+    //   this.props.getPosts();
+    // }
     if (nextProps.post.posts) {
       this.setState({
         posts:nextProps.post.posts
       })
     }
-    if(nextProps.post.newPost.success){
-      // this.props.getPosts();
-      }
   }
   handleChange = (event, newValue) => {
     this.setState({ value: newValue });
@@ -61,7 +60,7 @@ class Home extends Component {
           isImg={p.isImage}
           avatar={p.post_by_image}
           userName={p.post_by_name}
-          postDate={p.createdAt}
+          postDate={`${p.date} ${p.time}`}
           postImgSrc={p.image_link}
           postText={p.post}
           likeCount={p.likeCount}
@@ -105,18 +104,13 @@ const style = (theme) => ({
 });
 
 Home.propType = {
-  // token: PropType.func.isRequired,
-  // auth: PropType.object.isRequired,
   post: PropType.object.isRequired,
   getPosts: PropType.func.isRequired,
-  // checkAuthenticated:PropType.func.isRequired,
 };
 const mapState = (state) => ({
-  // auth: state.auth,
   post: state.post,
 });
 const mapActionToProps = {
-  // checkAuthenticated,
   getPosts,
 };
 

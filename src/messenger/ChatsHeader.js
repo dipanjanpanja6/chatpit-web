@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 const ChatsHeader = () => {
   const styles = useStyles();
   return React.createElement(Box, {
-    py: '10px',
+    py: '1px',
     px: 2,
     display: 'flex',
     alignItems: 'center'

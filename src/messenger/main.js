@@ -12,11 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+
 import ChatMsg from "./ChatMsg";
 import ConversationHead from "./ConversationHead";
 import ChatsHeader from "./ChatList";
@@ -87,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: theme.spacing(12) + 1,
+    width: theme.spacing(10) + 1,
     // [theme.breakpoints.up('sm')]: {
     //     width: theme.spacing(9) + 1,
     // },
@@ -97,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    padding: theme.spacing(4.5, 1),
+    padding: theme.spacing(2, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
@@ -108,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     bottom: 0,
     right: 0,
+    left:'80px',
     position: "fixed",
 
     height: 52,

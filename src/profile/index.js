@@ -31,6 +31,7 @@ import Sceleton from "../component/posts/sceleton";
 import DialogFrom from "../component/Dialog";
 import DialogFile from "../component/Dialog File";
 import { url } from "../config/config";
+import { ToastContainer, toast } from 'react-toastify';
 
 const token = localStorage.getItem("token");
 
@@ -119,9 +120,12 @@ class Layout extends Component {
         console.log(data);
         if (data.success) {
           this.props.getProfile();
+          this.handleClose();
+          toast.success(data.message);
+
         }
         if (data.error) {
-          alert(data.message);
+          toast.error(data.message);
         }
       });
     });
@@ -137,21 +141,28 @@ class Layout extends Component {
   updateDpp = (data) => {
     var formdata = new FormData();
     formdata.append("profile_image", data);
-
+    let toastId = null;
+    if(toastId === null){
+      toastId = toast('Upload in Progress', { autoClose: false })};
     fetch(`${url}/profile/update/image`, {
       method: "POST",
       headers: {
         Authorization: token,
       },
       body: formdata,
+     
     })
       .then((res) =>
         res.json().then((d) => {
           if (d.success) {
             this.props.getProfile();
+            toast.update(toastId,{ render: d.message,type: toast.TYPE.INFO, autoClose: 3000 });
+            this.handleClose();
+            
           }
           if (d.error) {
-            alert(d.message);
+            toast.update(toastId,{ render: d.message,type: toast.TYPE.INFO, autoClose: 3000 });
+
           }
           console.log(d);
         })
@@ -302,9 +313,10 @@ class Layout extends Component {
               ) : (
                 <>
                   <Skeleton width="20%" className={classes.title} />
-                  <Skeleton width="30%" />
-                  <Skeleton width="40%" />
-                  <Skeleton width="30%" />
+                  <Skeleton animation='pulse' width="30%" />
+                  <Skeleton height={15} width="50%" />
+                  <Skeleton height={18} width="40%" />
+                  <Skeleton animation='pulse' width="30%" />
                 </>
               )}
 

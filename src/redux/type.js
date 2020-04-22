@@ -9,6 +9,7 @@ export const GET_USER_PROFILE ='GET_USER_PROFILE'
 
 export const SET_UPDATE_NAME = "SET_UPDATE_NAME"
 export const NEW_POST = "NEW_POST"
+export const POST_NULL = "POST_NULL"
 
 
 

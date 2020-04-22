@@ -10,7 +10,7 @@ import store from './redux/store'
 // import { Paper } from '@material-ui/core';
 import sceleton from './component/posts/sceleton'
 import wel from './auth/login_page_slide'
-import messenger from './home/massegenger/masenger'
+import messenger from './component/posts/sceleton'
 import messengerl from './messenger/main'
 
 function App() {

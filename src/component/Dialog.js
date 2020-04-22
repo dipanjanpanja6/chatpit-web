@@ -18,6 +18,7 @@ export default function FormDialog(props) {
   }
 const Apply=()=>{
 props.e(count)
+setTimeout(setCount(''), 3000);
 
 }
   return (

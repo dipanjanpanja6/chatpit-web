@@ -1,5 +1,5 @@
 import { url } from "../../config/config";
-import { GET_ALL_POST,NEW_POST } from "../type";
+import { GET_ALL_POST,NEW_POST,POST_NULL } from "../type";
 
 
 const token = localStorage.getItem("token");
@@ -39,7 +39,8 @@ formdata.append("isImage", data.isImage);
   }).then((res) =>
     res.json().then((d) => {
       console.log(d);
-      
+      // d.error && toast.warn(d.message)
+      d.success && dispatch(getPosts());
       dispatch({
         type:NEW_POST,
         payload:d
@@ -48,3 +49,6 @@ formdata.append("isImage", data.isImage);
     })
   );
 };
+export const postNull =()=>(dispatch)=>{
+  dispatch({type:POST_NULL})
+} 
