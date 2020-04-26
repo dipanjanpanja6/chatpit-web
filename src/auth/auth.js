@@ -1,19 +1,23 @@
 import React, { Component } from "react";
-import "./Auth.css";
-import PropType from 'prop-types'
-import {signUp,login,createToken,checkAuthenticated} from '../redux/action/authaction'
-import Image from 'material-ui-image';
+import { url } from "../config/config";
+import PropType from "prop-types";
+import { signUp, login, createToken } from "../redux/action/authaction";
 import {
   Grid,
   Paper,
   Typography,
   Button,
   TextField,
+  Divider,
   //   ThemeProvider,
 } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
-import Slide from './login_page_slide'
+import ShoutBox from "../component/message/SoutBox";
+import AnonymousToSpecific from "../component/message/AnonymousToSpecific";
+import CopyRight from "../component/copyright";
+import GoogleLogin from "react-google-login";
 
 class Auth extends Component {
   constructor() {
@@ -27,23 +31,35 @@ class Auth extends Component {
 
       loginPassword: "",
       loginEmail: "",
-      // auth:false
     };
   }
-componentDidMount(){
-// this.props.token()
-// this.props.checkAuthenticated()
-
-}
-componentWillReceiveProps(nextProps){
-  console.log(nextProps);
-  // if (nextProps.auth.auth) {
-    
-  //   this.setState({
-  //     auth: nextProps.auth.auth,
-  //   });
-  // }
-}
+  responseGoogle = (response) => {
+    if (!response.error) {
+      fetch(`${url}/login/g/${response.tokenId}`, {
+        method: `POST`,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem("token", `Bearer ${data.token}`);
+          localStorage.setItem("device", data.device_key);
+          localStorage.setItem("uid", data.user_id);
+          data.success && (window.location = "/");
+          data.error && alert(data.message);
+        })
+        .catch((err) => console.log(err));
+    }
+    console.log(response);
+  };
+  componentDidMount() {
+    const data = {
+      mode: "light",
+      bgColor: "#eeeeee",
+    };
+    this.setState({ mode: data });
+    localStorage.setItem("chat_mode", JSON.stringify(data));
+  }
+  componentWillReceiveProps(nextProps) {}
 
   handleChangeSignUpUsername = (e) => {
     this.setState({ [e.target.id]: e.target.value });
@@ -51,61 +67,91 @@ componentWillReceiveProps(nextProps){
   handleSignUpEmailChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
-  handlePasswordChange=(e)=>{
-    this.setState({ [e.target.id]: e.target.value });    
-  }
-  handleRePasswordChange=(e)=>{
+  handlePasswordChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
-  }
+  };
+  handleRePasswordChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
   handleSignUp = (e) => {
     e.preventDefault();
-    const data={
-      name:this.state.signUpUserName,
-      email:this.state.signupEmail,
-      password:this.state.signupPassword,
-      confirmPassword:this.state.signupRepass
-    }
+    const data = {
+      name: this.state.signUpUserName,
+      email: this.state.signupEmail,
+      password: this.state.signupPassword,
+      confirmPassword: this.state.signupRepass,
+    };
     this.props.signUp(data);
-    
+
     signUp(data);
   };
-  handleEmailChange=(e)=>{
+  handleEmailChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
-  }
-  handlePasswordChange=(e)=>{
+  };
+  handlePasswordChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
-  }
+  };
   handleLogin = (e) => {
     e.preventDefault();
-    const data={
-      email:this.state.loginEmail,
-      password:this.state.loginPassword,
-    }
+    const data = {
+      email: this.state.loginEmail,
+      password: this.state.loginPassword,
+    };
     this.props.login(data);
   };
   handleLoginClick = () => {
     this.setState({ signup: !this.state.signup });
   };
-  // handleForgetPassword = () => {};
 
+  oneTime = () => {
+    fetch(`${url}/login/a`,{
+      method:`POST`
+    })
+    .then(res=>{res.json().then(data=>{
+      console.log(data)
+      localStorage.setItem("token", `Bearer ${data.token}`);
+          localStorage.setItem("device", data.device_key);
+          localStorage.setItem("uid", data.user_id);
+          data.success && (window.location = "/");
+          data.error && alert(data.message);
+    }
+    )}).catch(err=>console.log(err)
+    )
+  };
   render() {
     const { classes } = this.props;
-    // const { auth } = this.state;
-    
+
     return (
-      <div className="App">
-        
-        <Grid container className={classes.loginContainer}>
-          <Grid item className='loginGrid' xs={12} sm={5} md={4}>
-            <Paper className={classes.loginPaper}>
-              <Typography variant="h4">
-                Be together,
-                <br />
-                whenever.
-              </Typography>
+      <ThemeProvider
+        theme={createMuiTheme({
+          palette: {
+            // type: this.state.mode,
+            primary: {
+              main: "#fdd835",
+              // dark:"#000"
+            },
+            secondary: {
+              main: "#ffb300",
+            },
+            type: "dark",
+          },
+        })}
+      >
+        <Grid
+          container
+          style={{
+            minHeight: "100vh",
+            background:
+              "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)",
+          }}
+        >
+          <Grid item xs={12} md={4}>
+            <Paper className={classes.paper}>
+              <Typography variant="h5">Be together, whenever.</Typography>
               <Typography variant="subtitle1">
-                A simple way to connect anonymously with anyone.
+                A simple way to connect anonymously with anyone
               </Typography>
+              <Divider />
               {this.state.signup && (
                 <form onSubmit={this.handleSignUp} className={classes.from}>
                   <TextField
@@ -120,7 +166,6 @@ componentWillReceiveProps(nextProps){
                     autoFocus
                   />
                   <br />
-
                   <TextField
                     variant="outlined"
                     required
@@ -138,7 +183,7 @@ componentWillReceiveProps(nextProps){
                     margin="dense"
                     type="password"
                     placeholder="Password"
-                    required="true"
+                    required
                     // size='small'
                     variant="outlined"
                     id="signupPassword"
@@ -150,16 +195,16 @@ componentWillReceiveProps(nextProps){
                     margin="dense"
                     type="password"
                     placeholder="Retype password"
-                    required="true"
+                    required
                     id="signupRepass"
                     value={this.state.signupRepass}
                     variant="outlined"
                     onChange={this.handleRePasswordChange}
                   />
                   <br />
-
                   <Button
-                    show="false"
+                    // fullWidth
+                    // show="false"
                     className={classes.button}
                     variant="contained"
                     type="submit"
@@ -201,71 +246,116 @@ componentWillReceiveProps(nextProps){
                     className={classes.button}
                     variant="contained"
                     type="submit"
-                    color="primary"
+                    color="secondary"
                   >
                     Sign in
                   </Button>
                 </form>
               )}
 
-              <div className="loginHelp">
-                {this.state.signup && (
-                  <p onClick={this.handleLoginClick}>Existing user! Login</p>
+              {this.state.signup && (
+                <div>
+                  <Button
+                    className={classes.button}
+                    onClick={this.handleLoginClick}
+                    variant="contained"
+                    color="default"
+                  >
+                    Existing user! Login
+                  </Button>
+                </div>
+              )}
+              {!this.state.signup && (
+                <div>
+                  <Button
+                    className={classes.button}
+                    onClick={this.handleLoginClick}
+                    variant="contained"
+                    color="default"
+                  >
+                    Create new user
+                  </Button>
+                </div>
+              )}
+              <Button
+                className={classes.button}
+                onClick={this.oneTime}
+                variant="contained"
+                color="primary"
+              >
+                One time use*
+              </Button>
+              <br />
+              <GoogleLogin
+                clientId="672411401216-bd1qmtk0veo0jn4gmhc1vlgs4h5jgg9o.apps.googleusercontent.com"
+                buttonText="Login"
+                render={(renderProps) => (
+                  <Button
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                  >
+                    continue with Google
+                  </Button>
                 )}
-                {!this.state.signup && (
-                  <div>
-                    <p onClick={this.handleForgetPassword}>Forget password</p>
-                    <p onClick={this.handleLoginClick}>Create new user</p>
-                  </div>
-                )}
-              </div>
+                onSuccess={this.responseGoogle}
+                onFailure={this.responseGoogle}
+                cookiePolicy={"single_host_origin"}
+              />
+              <Divider />
+              <CopyRight />
             </Paper>
           </Grid>
-
-          <Grid className="loginBG" xs={12} sm={7} md={8}>
-            <Slide/>
-            
+          <Grid item xs={12} md={4}>
+            <div
+              style={{
+                margin: "16px",
+              }}
+            >
+              <AnonymousToSpecific hight='63vh' />
+            </div>
+          </Grid>
+          <Grid xs={12} md={4} item>
+            <div
+              style={{
+                margin: "16px",
+              }}
+            >
+              <ShoutBox hight="73vh" />
+            </div>
           </Grid>
         </Grid>
-
-      </div>
+      </ThemeProvider>
     );
   }
 }
 
 const style = (theme) => ({
-
-  loginPaper: {
-    display: "flex",
-    flexDirection: "column",
+  paper: {
     padding: theme.spacing(2),
-    margin: "12vh 12px auto",
-    // maxHeight:'100vh'
+    margin: theme.spacing(2),
+
+    // width:theme.spacing(16)*3,
+    textAlign: "center",
+    minHeight: "89vh",
   },
   button: {
-    marginTop: "12px",
-  },
-  from: {
-    margin: "20px 0px",
-    maxHeight:'90vh',
-  },
-  loginB: {
-    padding: "20px",
+    marginTop: "10px",
+    width: "220px",
   },
 });
 
-Auth.propType={
-signUp:PropType.func.isRequired,
-login:PropType.func.isRequired,
-createToken:PropType.func.isRequired,
-// auth:PropType.object.isRequired
-
-}
-const mapState=(state)=>({
-// auth:state.auth
-})
-const mapActionsToProps={
-  signUp,login,createToken,
-  // checkAuthenticated
-}
-export default connect(mapState, mapActionsToProps) (withStyles(style)(Auth));
+Auth.propType = {
+  signUp: PropType.func.isRequired,
+  login: PropType.func.isRequired,
+  createToken: PropType.func.isRequired,
+};
+const mapState = (state) => ({});
+const mapActionsToProps = {
+  signUp,
+  login,
+  createToken,
+};
+export default connect(mapState, mapActionsToProps)(withStyles(style)(Auth));

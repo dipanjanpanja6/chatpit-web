@@ -39,7 +39,6 @@ setTimeout(setCount(''), 3000);
             id={props.label}
             label={props.label}
             type="text"
-            fullWidth
           />
         </DialogContent>
         <DialogActions>

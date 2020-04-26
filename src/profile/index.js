@@ -31,7 +31,7 @@ import Sceleton from "../component/posts/sceleton";
 import DialogFrom from "../component/Dialog";
 import DialogFile from "../component/Dialog File";
 import { url } from "../config/config";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const token = localStorage.getItem("token");
 
@@ -47,6 +47,8 @@ class Layout extends Component {
       content: "",
       label: "",
       posts: null,
+      mode:'light',
+      modeState:'Dark Mode'
     };
   }
   getPost = () => {
@@ -76,6 +78,22 @@ class Layout extends Component {
   componentWillMount() {
     this.props.getProfile();
     this.getPost();
+    const f = localStorage.getItem('chat_mode')
+    if(f){
+      const theme = JSON.parse(f);
+      if (theme.mode === 'dark'){
+        this.setState({
+          mode:'dark',
+          modeState:'Light Mode'
+        })
+      }
+      if (theme.mode === 'light'){
+        this.setState({
+          mode:'light',
+          modeState:'Dark Mode'
+        })
+      }
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.post.newPost.success) {
@@ -187,9 +205,36 @@ class Layout extends Component {
     });
   };
 
-  mode = () => {};
+  handleMode = () => {
+    const {mode} = this.state;
+    if (mode === 'light'){
+      const data = {
+        mode:'dark',
+        bgColor:'#000000'
+      };
+      localStorage.setItem('chat_mode', JSON.stringify(data))
+      this.setState({
+        mode:'dark',
+        modeState:'Light Mode'
+      })
+      window.location.reload()
+    }
+    if (mode === 'dark'){
+      this.setState({
+        mode:'light',
+        modeState:'Dark Mode'
+      });
+      const data = {
+        mode:'light',
+        bgColor:'#eeeeee'
+      };
+      localStorage.setItem('chat_mode', JSON.stringify(data))
+      window.location.reload()
+    }
+  };
   render() {
     const { classes } = this.props;
+    const {mode} = this.state
     const {
       userProfile,
       open,
@@ -231,13 +276,13 @@ class Layout extends Component {
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText primary="Sign out" />
+              <ListItemText color='' style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode === 'dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="Sign out" />
             </ListItem>
-            <ListItem onClick={this.mode} button>
+            <ListItem onClick={this.handleMode} button>
               <ListItemIcon>
                 <Brightness4Icon />
               </ListItemIcon>
-              <ListItemText primary="Dark mode" />
+              <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary={this.state.modeState} />
             </ListItem>
 
             {/* <ListItem button>Add details</ListItem> */}
@@ -246,8 +291,8 @@ class Layout extends Component {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
-              {open ? <ExpandLess /> : <ExpandMore />}
+              <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="Settings"/>
+              {open ? <ExpandLess style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}}/> : <ExpandMore style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}}/>}
             </ListItem>
 
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -260,7 +305,7 @@ class Layout extends Component {
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>
-                  <ListItemText primary="update user name" />
+                  <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="update user name" />
                 </ListItem>
                 <ListItem
                   button
@@ -270,7 +315,7 @@ class Layout extends Component {
                   <ListItemIcon>
                     <AddPhotoAlternateIcon />
                   </ListItemIcon>
-                  <ListItemText primary="update user image" />
+                  <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="update user image" />
                 </ListItem>
               </List>
             </Collapse>
@@ -357,6 +402,7 @@ class Layout extends Component {
 const style = (theme) => ({
   root: {
     flexGrow: 1,
+    minHeight:'calc(100vh - 80px)'
   },
   paper: {
     marginTop: "100px",

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   Paper,
@@ -14,7 +14,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { post,postNull } from "../../redux/action/postAction";
 import PropType from "prop-types";
 import { connect } from "react-redux";
-import DialogFile from "../Dialog File";
 import { keys } from "@material-ui/core/styles/createBreakpoints";
 
 class NewPost extends Component { 

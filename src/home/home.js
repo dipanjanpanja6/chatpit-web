@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
   Grid,
   Paper,
-  Typography,
+ 
+  
 } from "@material-ui/core";
 
 import PropType from "prop-types";
@@ -16,6 +17,8 @@ import PostCard from "../component/posts/postCard";
 import Skeleton from "../component/posts/sceleton";
 import CopyRight from "../component/copyright";
 import ImageSlider from "../component/posts/imageSlider";
+import SoutBox from "../component/message/SoutBox";
+import AnonymousToSpecific from "../component/message/AnonymousToSpecific";
 
 class Home extends Component {
   constructor() {
@@ -31,13 +34,13 @@ class Home extends Component {
     // console.log(nextProps.auth.auth);
     // if (nextProps.post.newPost) {
     //   console.log(nextProps.post.newPost);
-      
+
     //   this.props.getPosts();
     // }
     if (nextProps.post.posts) {
       this.setState({
-        posts:nextProps.post.posts
-      })
+        posts: nextProps.post.posts,
+      });
     }
   }
   handleChange = (event, newValue) => {
@@ -51,35 +54,40 @@ class Home extends Component {
     const { posts } = this.state;
     const { classes } = this.props;
 
-    const postsList =posts? posts.map((p) => {
-      return (
-        <PostCard
-        post_uid={p.post_by_uid}
-          postID={p.post_id}
-          key={p.post_id}
-          isImg={p.isImage}
-          avatar={p.post_by_image}
-          userName={p.post_by_name}
-          postDate={`${p.date} ${p.time}`}
-          postImgSrc={p.image_link}
-          postText={p.post}
-          likeCount={p.likeCount}
-        />
-      );
-    }):<Skeleton/>
-    function TabContainer(props) {
-      return (
-        <Typography component="div" style={{ padding: 8 * 3 }}>
-          {props.children}
-        </Typography>
-      );
-    }
-
+    const postsList = posts ? (
+      posts.map((p) => {
+        return (
+          <PostCard
+            post_uid={p.post_by_uid}
+            postID={p.post_id}
+            key={p.post_id}
+            isImg={p.isImage}
+            avatar={p.post_by_image}
+            userName={p.post_by_name}
+            postDate={`${p.date} ${p.time}`}
+            postImgSrc={p.image_link}
+            postText={p.post}
+            likeCount={p.likeCount}
+          />
+        );
+      })
+    ) : (
+      <Skeleton />
+    );
+    // function TabContainer(props) {
+    //   return (
+    //     <Typography component="div" style={{ padding: 8 * 3 }}>
+    //       {props.children}
+    //     </Typography>
+    //   );
+    // }
+    
     return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
           <Paper>
-            <ImageSlider />
+<SoutBox hight='67vh' />
+            {/* <ImageSlider /> */}
           </Paper>
         </Grid>
 
@@ -90,17 +98,21 @@ class Home extends Component {
         </Grid>
 
         <Grid item xs={12} md={12} lg={3}>
+          <AnonymousToSpecific hight='50vh'/>
           <CopyRight />
         </Grid>
       </Grid>
     );
+    
   }
 }
+
 const style = (theme) => ({
   root: {
     flexGrow: 1,
   },
   msgList: {},
+  
 });
 
 Home.propType = {

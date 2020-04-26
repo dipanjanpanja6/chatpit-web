@@ -1,14 +1,10 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Tab, Tabs, Grid, AppBar, Typography } from "@material-ui/core";
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core/styles";
+import { Tab, Tabs, Grid, AppBar, Typography, } from "@material-ui/core";
+import { createMuiTheme,  ThemeProvider} from "@material-ui/core/styles";
 import PropType from "prop-types";
-import { token, checkAuthenticated } from "../redux/action/authaction";
+import { checkAuthenticated } from "../redux/action/authaction";
 
 import { connect } from "react-redux";
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
@@ -19,21 +15,56 @@ import Mi from "../messenger/main";
 
 import Home from "../home/home";
 import Layout from "../profile/index";
-import Messenger from "../home/massegenger/index";
 import Loading from "../loading/loading";
-import { yellow } from "@material-ui/core/colors";
-
+import io from 'socket.io-client'
+const socket = io('http://localhost:4009')
+export const sockets=socket
 class appBar extends Component {
   constructor() {
     super();
     this.state = {
-      auth: false, ///
+      auth: true, ///
       value: 0,
-      mode: "light",
+      mode: {},
+      color:'#fdd835'
     };
   }
-  componentDidMount() {
+  componentWillMount() {
+    socket.emit('connected',()=>{})
+    socket.emit('disconnect',()=>{
+    })
+    var uid = localStorage.getItem('uid');
+if(uid){
+  console.log(uid);
+  
+  socket.emit('user',{uid})
+}
+
+
+
     this.props.checkAuthenticated();
+    const theme = JSON.parse(localStorage.getItem('chat_mode'));
+    if (!theme){
+      const data = {
+        mode:'light',
+        bgColor:'#eeeeee'
+      };
+      this.setState({mode:data})
+      localStorage.setItem('chat_mode', JSON.stringify(data))
+    }else {
+      if (theme.mode === 'light'){
+        this.setState({
+          color:'#fdd835'
+        })
+      }
+      if (theme.mode === 'dark'){
+        this.setState({
+          color:theme.mode
+        })
+      }
+      this.setState({mode:theme})
+    }
+
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.auth) {
@@ -45,7 +76,7 @@ class appBar extends Component {
     }
     if (nextProps.auth.mode) {
       this.setState({
-        mode: "light",
+        //mode: "light",
       });
     }
   }
@@ -54,7 +85,7 @@ class appBar extends Component {
   };
 
   render() {
-    const { auth, value } = this.state;
+    const { auth, value,mode } = this.state;
 
     function TabContainer(props) {
       return (
@@ -68,24 +99,25 @@ class appBar extends Component {
       <ThemeProvider
         theme={createMuiTheme({
           
-          // overrides: { MuiAppBar: {default: "#FFC0CB"  } }, palette: { type: "dark" } ,
           palette: {
-            type: this.state.mode,
+            // type: this.state.mode,
             primary: {
               main: '#fdd835',
+              dark:"#000"
             },
             secondary: {
               main: '#ffb300',
             },
-            type:'light'
+            type:mode.mode
           },
         })}
       >
         <div>
           {!auth && <Loading />}
           {auth && (
-            <Grid>
-              <AppBar position="sticky" color='primary'>
+            <Grid >
+              <AppBar position="sticky" color={mode.mode === 'light' ? 'primary':'default'}
+            >
                 <Tabs
                   value={value}
                   onChange={this.handleChange}

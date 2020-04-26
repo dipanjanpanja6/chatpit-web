@@ -1,13 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AddCircle from '@material-ui/icons/AddCircle';
-import Gif from '@material-ui/icons/Gif';
-import Image from '@material-ui/icons/Image';
-import Note from '@material-ui/icons/Note';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import TagFaces from '@material-ui/icons/TagFaces';
+import { makeStyles } from '@material-ui/core/styles';  
 const useStyles = makeStyles(() => ({
   icon: {
     color: 'rgb(0, 153, 255)',

@@ -3,10 +3,8 @@ import { url } from "../../config/config";
 import { toast } from 'react-toastify';
 import {
   withStyles,
-  TextField,
   ListItemText,
   Typography,
-  Button,
   Card,
   CardHeader,
   CardContent,
@@ -17,7 +15,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Input,
   Paper,
   Grid,
 } from "@material-ui/core";
@@ -25,14 +22,12 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { red } from "@material-ui/core/colors";
 import SendIcon from "@material-ui/icons/Send";
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import PropType from "prop-types";
 import clsx from "clsx";
 import SkeletonC from "./SkeletonCmnt";
-import Alert from "@material-ui/lab/Alert";
 
 const token = localStorage.getItem("token");
 

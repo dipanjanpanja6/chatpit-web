@@ -52,28 +52,7 @@ const ConversationHead = () => {
 </ListItem>
     
   )
-  return React.createElement(ListItem, {
-    ContainerComponent: 'div',
-    ContainerProps: {
-      className: styles.container
-    },
-    className: styles.root
-  }, React.createElement(ListItemAvatar, null, React.createElement(Avatar, {
-    src: 'https://i.pravatar.cc/300?img=13'
-  })), React.createElement(ListItemText, {
-    primary: 'Imaad Casey',
-    secondary: 'active 17m ago',
-    classes: {
-      primary: styles.primary,
-      secondary: styles.secondary
-    }
-  }), React.createElement(ListItemSecondaryAction, null, React.createElement(IconButton, {
-    className: styles.iconBtn
-  }, React.createElement(Phone, null)), React.createElement(IconButton, {
-    className: styles.iconBtn
-  }, React.createElement(Videocam, null)), React.createElement(IconButton, {
-    className: styles.iconBtn
-  }, React.createElement(Info, null))));
+ 
 };
 
 export default ConversationHead;

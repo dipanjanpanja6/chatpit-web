@@ -40,7 +40,6 @@ props.e(count)
             id={props.label}
             label={props.label}
             type="file"
-            fullWidth
           />
         </DialogContent>
         <DialogActions>

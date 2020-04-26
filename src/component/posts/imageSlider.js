@@ -1,33 +1,11 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MobileStepper from "@material-ui/core/MobileStepper";
-import Paper from "@material-ui/core/Paper";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
-
-
-import {
-  withStyles,
-  TextField,
-  Typography,
-  Button,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  CardMedia,
-  Collapse,
-  Avatar,
-  IconButton,
-  Menu,
-  MenuItem
-} from "@material-ui/core";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {Button,  Card,  CardHeader,  CardContent,  Avatar,  IconButton,} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);

@@ -1,5 +1,5 @@
 import { url } from "../../config/config";
-import { GET_USER_PROFILE,SET_UPDATE_NAME } from "../type";
+import { GET_USER_PROFILE } from "../type";
 
 
 const token = localStorage.getItem("token");

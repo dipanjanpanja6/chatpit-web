@@ -9,22 +9,21 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 // import { Paper } from '@material-ui/core';
 import sceleton from './component/posts/sceleton'
-import wel from './auth/login_page_slide'
 import messenger from './component/posts/sceleton'
 import messengerl from './messenger/main'
 
 function App() {
-
+  const d = localStorage.getItem('chat_mode');
+  const theme = JSON.parse(d);
   return (
     
-    <div className="App">
+    <div style={{backgroundColor:theme ? theme.bgColor:'#eeeeee'}}  className="App">
       <Provider store={store}>
        
         <Router>
 
           {/* <Route exact path="/authChecker" component={AuthChecker} /> */}
 
-          <Route exact path="/testl" component={messengerl} />
           <Route exact path="/test" component={messenger} />
           <Route exact path="/auth" component={Auth} />
           <Route exact path="/" component={Appbar} />

@@ -42,7 +42,7 @@ export const login = (data) => (dispatch) => {
         localStorage.setItem("device", data.device_key);
         localStorage.setItem("uid", data.user_id);
 
-        data.success && dispatch(createToken(data.user_id, data.device_key));
+        // data.success && dispatch(createToken(data.user_id, data.device_key));
         data.success && (window.location = "/");
         data.error && alert(data.message);
         
