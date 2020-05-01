@@ -51,7 +51,7 @@ class Auth extends Component {
     }
     console.log(response);
   };
-  componentDidMount() {
+  componentDidMount() {    
     const data = {
       mode: "light",
       bgColor: "#eeeeee",
@@ -139,8 +139,10 @@ class Auth extends Component {
       >
         <Grid
           container
+          
           style={{
             minHeight: "100vh",
+            textAlign:'center',
             background:
               "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)",
           }}
@@ -314,7 +316,7 @@ class Auth extends Component {
                 margin: "16px",
               }}
             >
-              <AnonymousToSpecific hight='63vh' />
+              {/* <AnonymousToSpecific key =' auth_anonymous' hight='63vh' /> */}
             </div>
           </Grid>
           <Grid xs={12} md={4} item>
@@ -323,7 +325,7 @@ class Auth extends Component {
                 margin: "16px",
               }}
             >
-              <ShoutBox hight="73vh" />
+              <ShoutBox key ='auth_shoutBox' hight="73vh" />
             </div>
           </Grid>
         </Grid>

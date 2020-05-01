@@ -9,8 +9,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 // import { Paper } from '@material-ui/core';
 import sceleton from './component/posts/sceleton'
-import messenger from './component/posts/sceleton'
-import messengerl from './messenger/main'
+import messenger from './component/message/SoutBox'
 
 function App() {
   const d = localStorage.getItem('chat_mode');

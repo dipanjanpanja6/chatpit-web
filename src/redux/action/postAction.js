@@ -13,7 +13,7 @@ export const getPosts = () => (dispatch) => {
   })
     .then((res) =>
       res.json().then((data) => {
-        console.log(data);
+        // console.log(data);
         
         dispatch({
           type: GET_ALL_POST,

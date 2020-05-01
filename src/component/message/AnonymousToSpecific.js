@@ -45,25 +45,19 @@ class AnonymousToSpecific extends Component {
   constructor() {
     super();
     this.state={
-      msg:'',
-      rMsg:[],
-      userID:''
+      rMsg:[]
+
     }
   }
   componentDidMount(){
-    // sockets.on('msg',(msg)=>{
-    //   this.setState({rMsg:[...this.state.rMsg,msg]})
-    //   console.log(this.state.rMsg);
-      
-    // })
+console.log('kk');
+
   }
   handleChange=(e)=>{
   this.setState({[e.target.id]:e.target.value})
   }
   Send=()=>{
-    var msg =this.state.msg
-    var uid ='k'
-    sockets.emit('soutBox',{msg,uid})
+
   }
   render() {
     const { classes,hight } = this.props;
@@ -132,7 +126,7 @@ class AnonymousToSpecific extends Component {
         <br/>
         <Divider/>
         <div style={{ overflow: "auto", height:hight  }}>
-            {SoutMessage}
+            {/* {SoutMessage} */}
           
         </div>
         <Grid item>

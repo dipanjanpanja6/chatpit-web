@@ -4,10 +4,20 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AddCircle from '@material-ui/icons/AddCircle';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import TagFaces from '@material-ui/icons/TagFaces';
-import { makeStyles } from '@material-ui/core/styles';  
-const useStyles = makeStyles(() => ({
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => (console.log(theme),{  
+  root:{alignItems: 'center',
+  width: '100%',
+  display: 'inline-flex',
+  backgroundColor: theme.palette.background.paper,
+  position:'fixed',
+  paddingLeft:'80px',
+  bottom:0,
+  right:0
+  },
   icon: {
-    color: 'rgb(0, 153, 255)',
+    color: theme.palette.secondary.main,
     width: 44,
     height: 44,
     padding: 6,
@@ -30,19 +40,20 @@ const ChatBar = ({
   concise
 }) => {
   const styles = useStyles();
-  return React.createElement(React.Fragment, null, React.createElement(AddCircle, {
-    className: styles.icon
-  }),  React.createElement(InputBase, {
-    className: styles.input,
-    placeholder: 'Type a message...',
-    endAdornment: React.createElement(InputAdornment, {
-      position: 'end'
-    }, React.createElement(TagFaces, {
-      className: styles.icon
-    }))
-  }), React.createElement(ThumbUp, {
-    className: styles.icon
-  }));
-};
+  return (
+    <div className={styles.root}>
+      <AddCircle className={styles.icon} />
+      <InputBase className={styles.input} placeholder='Type a message...'
+       endAdornment={<InputAdornment position='end'>
+         <TagFaces className={styles.icon}/>
+       </InputAdornment>}>
 
-export default ChatBar;
+      </InputBase>
+
+      <ThumbUp className={styles.icon} />
+
+    </div>
+
+  )
+  }
+  export default ChatBar

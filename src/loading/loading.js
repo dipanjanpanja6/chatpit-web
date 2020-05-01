@@ -4,20 +4,20 @@ import './index.css'
 export default function Loading(){
 
   return(
-    <div class='con'>
-    <div class='body'>
+    <div className='con'>
+    <div className='body'>
       <span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </span>
-      <div class='base'>
+      <div className='base'>
         <span></span>
-        <div class='face'></div>
+        <div className='face'></div>
       </div>
     </div>
-    <div class='longfazers'>
+    <div className='longfazers'>
       <span></span>
       <span></span>
       <span></span>

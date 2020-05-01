@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import {
   Grid,
   Paper,
- 
-  
+
+
 } from "@material-ui/core";
 
 import PropType from "prop-types";
@@ -29,6 +29,8 @@ class Home extends Component {
   }
   componentDidMount() {
     this.props.getPosts();
+    // console.log('home');
+    
   }
   componentWillReceiveProps(nextProps) {
     // console.log(nextProps.auth.auth);
@@ -72,8 +74,8 @@ class Home extends Component {
         );
       })
     ) : (
-      <Skeleton />
-    );
+        <Skeleton />
+      );
     // function TabContainer(props) {
     //   return (
     //     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -81,38 +83,40 @@ class Home extends Component {
     //     </Typography>
     //   );
     // }
-    
+
     return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
           <Paper>
-<SoutBox hight='67vh' />
             {/* <ImageSlider /> */}
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={7} lg={6}>
-          <NewPost />
+          <NewPost  key = 'home_newPost' />
           {postsList}
           <hr />
         </Grid>
 
-        <Grid item xs={12} md={12} lg={3}>
-          <AnonymousToSpecific hight='50vh'/>
-          <CopyRight />
+        <Grid item xs={12} md={12} lg={3} >
+          {/* <AnonymousToSpecific  key = 'home_anonymous' hight='50vh' /> */}
+          <SoutBox key =' home_shoutBox' hight='67vh' />
+
+          <CopyRight  key ='home_copyright' />
         </Grid>
       </Grid>
     );
-    
+
   }
 }
 
 const style = (theme) => ({
   root: {
     flexGrow: 1,
+   
   },
   msgList: {},
-  
+
 });
 
 Home.propType = {

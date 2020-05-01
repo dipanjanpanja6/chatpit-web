@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {url} from '../config/config'
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tab, Tabs, Grid, AppBar, Typography, } from "@material-ui/core";
@@ -16,30 +17,21 @@ import Mi from "../messenger/main";
 import Home from "../home/home";
 import Layout from "../profile/index";
 import Loading from "../loading/loading";
-import io from 'socket.io-client'
-const socket = io('http://localhost:4009')
-export const sockets=socket
+// import sockets from '../config/config'
+// import io from 'socket.io-client'
+// const socket = io(url) 
+// export const sockets=socket
 class appBar extends Component {
   constructor() {
     super();
     this.state = {
-      auth: true, ///
+      auth: false, ///
       value: 0,
       mode: {},
       color:'#fdd835'
     };
   }
-  componentWillMount() {
-    socket.emit('connected',()=>{})
-    socket.emit('disconnect',()=>{
-    })
-    var uid = localStorage.getItem('uid');
-if(uid){
-  console.log(uid);
-  
-  socket.emit('user',{uid})
-}
-
+  componentDidMount() {
 
 
     this.props.checkAuthenticated();
@@ -89,7 +81,7 @@ if(uid){
 
     function TabContainer(props) {
       return (
-        <Typography component="div" style={{ padding: 8 * 3 }}>
+        <Typography component="div" style={{ padding: 8 * 3 ,minHeight:'calc(100vh - 96px)', overflow:'auto' }}>
           {props.children}
         </Typography>
       );
@@ -115,7 +107,7 @@ if(uid){
         <div>
           {!auth && <Loading />}
           {auth && (
-            <Grid >
+            <Grid className="xxxxxxxxxxxxxxxxxxxxxxxxxxxx">
               <AppBar position="sticky" color={mode.mode === 'light' ? 'primary':'default'}
             >
                 <Tabs

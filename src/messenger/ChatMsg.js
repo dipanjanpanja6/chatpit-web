@@ -55,13 +55,13 @@ const useStyles = makeStyles(({
     left: {
       borderTopRightRadius: radius,
       borderBottomRightRadius: radius,
-      backgroundColor: palette.grey[100]
+      backgroundColor: palette.background.paper
     },
     right: {
       borderTopLeftRadius: radius,
       borderBottomLeftRadius: radius,
       backgroundColor: rightBgColor,
-      color: palette.common.white
+      color: palette.common.black
     },
     leftFirst: {
       borderTopLeftRadius: radius
@@ -78,9 +78,9 @@ const useStyles = makeStyles(({
     iconBtn: {
       opacity: 0,
       padding: 6,
-      color: 'rgba(0,0,0,0.34)',
+      color: palette.action.disabled,
       '&:hover': {
-        color: 'rgba(0,0,0,0.87)'
+        color: palette.action.active,
       },
       margin: '0 4px',
       '& svg': {

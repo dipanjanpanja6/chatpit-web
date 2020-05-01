@@ -25,13 +25,18 @@ class NewPost extends Component {
       isImg: false,
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    // console.log("newPost");
+    
+  }
   componentWillReceiveProps(p){
 // console.log(p.posts.post);
 if(p.posts.post.newPost){
   p.posts.post.newPost.error &&  toast.error(p.posts.post.newPost.message);
   p.posts.post.newPost.success &&  toast.success(p.posts.post.newPost.message);
   p.posts.post.newPost.success &&  this.setState({postText:''});
+  p.posts.post.newPost.success &&  this.setState({postImage:''});
+  p.posts.post.newPost.success &&  this.setState({isImg:false});
   p.posts.post.newPost.success &&  this.props.postNull();
   
 }
@@ -76,7 +81,7 @@ if(p.posts.post.newPost){
         {isImg && (
         <Image
           src={files}
-          imageStyle={{'object-fit': 'cover'}}
+          imageStyle={{'objectFit': 'cover'}}
           aspectRatio={16/9}
         />
          )} 
@@ -102,7 +107,7 @@ if(p.posts.post.newPost){
         {React.createElement("input", {
           type: "file",
           ref: "iii",
-          hidden: "true",
+          hidden:true,
           onChange: this.k,
         })}
       </Paper>

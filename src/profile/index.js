@@ -402,7 +402,7 @@ class Layout extends Component {
 const style = (theme) => ({
   root: {
     flexGrow: 1,
-    minHeight:'calc(100vh - 80px)'
+    // minHeight:'calc(100vh - 80px)'
   },
   paper: {
     marginTop: "100px",

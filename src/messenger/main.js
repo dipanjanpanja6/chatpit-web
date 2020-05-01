@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "uppercase",
   },
   appBar: {
-    top: "48px",
+    top: "40px",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   appBarShift: {
-    top: "48px",
+    top: "40px",
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
@@ -56,14 +56,13 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
   drawer: {
-    top: "48px",
-
+    top: "40px",
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
   },
   drawerOpen: {
-    top: "48px",
+    top: "40px",
 
     width: drawerWidth,
     // top:theme.mixins.toolbar,
@@ -75,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   drawerClose: {
-    top: "48px",
+    top: "40px",
 
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -98,14 +97,13 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
   },
   footer: {
     bottom: 0,
     right: 0,
     left:'80px',
     position: "fixed",
-
     height: 52,
     width:`calc(100vw - ${theme.spacing(13)}px )`,
     display: "flex",
@@ -117,6 +115,16 @@ const useStyles = makeStyles((theme) => ({
   chatMsg: {
     marginBottom: "40px",
   },
+  scroll:{
+    paddingTop:'20px',
+    overflow:'auto',
+    scrollbarWidth: 'none', /* Firefox */
+    '-ms-overflow-style': 'none', /* IE 10+ */
+    '&::-webkit-scrollbar' : {
+      width: '0px',
+      background: 'transparent', /* Chrome/Safari/Webkit */
+    }
+  }
 }));
 
 export default function MiniDrawer() {
@@ -182,11 +190,15 @@ export default function MiniDrawer() {
           </IconButton>
         </div>
         <Divider />
-        <ChatsHeader />
+        <div className={classes.scroll}>
+        <ChatsHeader/>
+        <div className={classes.toolbar} />
+        </div>
+        
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <div className={classes.toolbar} />
+        {/* <div className={classes.toolbar} /> */}
         <div className={classes.chatMsg}>
           <Typography className={classes.date}>fri 1:46 PM</Typography>
           <ChatMsg
@@ -203,13 +215,13 @@ export default function MiniDrawer() {
             ]}
           />
           <ChatMsg messages={["hello", "hi", "how r u?"]} side={"right"} />
-          <ChatMsg messages={["hello", "hi", "how r u?"]} side={"right"} />
-          <ChatMsg messages={["hello", "hi", "how r u?"]} side={"right"} />
-        </div>
-
-        <div className={classes.footer}>
+          <ChatMsg messages={["hello", "i am fine bro", "how r u?"]} />
+          <ChatMsg messages={["good"]} side={"right"} />
           <ChatBar />
         </div>
+
+        {/* <div className={classes.footer}> */}
+        {/* </div> */}
       </main>
     </div>
   );
