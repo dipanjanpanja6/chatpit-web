@@ -1,26 +1,34 @@
 import React, { Component } from "react";
-import {url} from '../config/config'
-import { ToastContainer} from "react-toastify";
+import { url } from '../config/config'
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tab, Tabs, Grid, AppBar, Typography, } from "@material-ui/core";
-import { createMuiTheme,  ThemeProvider} from "@material-ui/core/styles";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import PropType from "prop-types";
 import { checkAuthenticated } from "../redux/action/authaction";
 
 import { connect } from "react-redux";
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import HomeIcon from "@material-ui/icons/Home";
 import Mi from "../messenger/main";
+import Notify from "../notifications/notify";
 
 import Home from "../home/home";
 import Layout from "../profile/index";
 import Loading from "../loading/loading";
-// import sockets from '../config/config'
-// import io from 'socket.io-client'
-// const socket = io(url) 
-// export const sockets=socket
+const style = (theme) => ({
+  typo: {
+    padding: '20px 20px 10px', minHeight: 'calc(100vh - 96px)', overflow: 'auto',
+   
+  }
+});
+
+
+
 class appBar extends Component {
   constructor() {
     super();
@@ -28,7 +36,7 @@ class appBar extends Component {
       auth: false, ///
       value: 0,
       mode: {},
-      color:'#fdd835'
+      color: '#fdd835'
     };
   }
   componentDidMount() {
@@ -36,25 +44,25 @@ class appBar extends Component {
 
     this.props.checkAuthenticated();
     const theme = JSON.parse(localStorage.getItem('chat_mode'));
-    if (!theme){
+    if (!theme) {
       const data = {
-        mode:'light',
-        bgColor:'#eeeeee'
+        mode: 'light',
+        // bgColor:'#eeeeee'
       };
-      this.setState({mode:data})
+      this.setState({ mode: data })
       localStorage.setItem('chat_mode', JSON.stringify(data))
-    }else {
-      if (theme.mode === 'light'){
+    } else {
+      if (theme.mode === 'light') {
         this.setState({
-          color:'#fdd835'
+          color: '#fdd835'
         })
       }
-      if (theme.mode === 'dark'){
+      if (theme.mode === 'dark') {
         this.setState({
-          color:theme.mode
+          color: theme.mode
         })
       }
-      this.setState({mode:theme})
+      this.setState({ mode: theme })
     }
 
   }
@@ -77,11 +85,12 @@ class appBar extends Component {
   };
 
   render() {
-    const { auth, value,mode } = this.state;
+    const { auth, value, mode } = this.state;
+    const { classes } = this.props;
 
     function TabContainer(props) {
       return (
-        <Typography component="div" style={{ padding: 8 * 3 ,minHeight:'calc(100vh - 96px)', overflow:'auto' }}>
+        <Typography component="div" className={classes.typo}>
           {props.children}
         </Typography>
       );
@@ -90,26 +99,26 @@ class appBar extends Component {
     return (
       <ThemeProvider
         theme={createMuiTheme({
-          
+
           palette: {
-            // type: this.state.mode,
+
             primary: {
               main: '#fdd835',
-              dark:"#000"
+              dark: "#000"
             },
             secondary: {
               main: '#ffb300',
             },
-            type:mode.mode
+            type: mode.mode
           },
         })}
       >
         <div>
           {!auth && <Loading />}
           {auth && (
-            <Grid className="xxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-              <AppBar position="sticky" color={mode.mode === 'light' ? 'primary':'default'}
-            >
+            <Grid>
+              <AppBar position="sticky" color={mode.mode === 'light' ? 'primary' : 'default'}
+              >
                 <Tabs
                   value={value}
                   onChange={this.handleChange}
@@ -119,6 +128,7 @@ class appBar extends Component {
                 >
                   <Tab icon={<HomeIcon />} />
                   <Tab icon={<ForumOutlinedIcon />} />
+                  <Tab icon={<NotificationsIcon />} />
                   <Tab icon={<AccountCircleIcon />} />
                 </Tabs>
               </AppBar>
@@ -134,6 +144,11 @@ class appBar extends Component {
                 </TabContainer>
               )}
               {value === 2 && (
+                <TabContainer>
+                  < Notify />
+                </TabContainer>
+              )}
+              {value === 3 && (
                 <TabContainer>
                   <Layout />
                 </TabContainer>
@@ -158,4 +173,4 @@ const mapActionToProps = {
   checkAuthenticated,
 };
 
-export default connect(mapState, mapActionToProps)(appBar);
+export default connect(mapState, mapActionToProps)(withStyles(style)(appBar));

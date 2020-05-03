@@ -2,7 +2,7 @@ import { url } from "../../config/config";
 import { GET_USER_PROFILE } from "../type";
 
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 
 export const getProfile = () => (dispatch) => {

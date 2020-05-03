@@ -50,7 +50,7 @@ class AnonymousToSpecific extends Component {
     }
   }
   componentDidMount(){
-console.log('kk');
+// console.log('kk');
 
   }
   handleChange=(e)=>{

@@ -3,6 +3,7 @@ import React from "react";
 export default function CopyRight() {
   return (
     <div style={{fontSize: "12px",color:'#aaa',textDecoration:"none"}}>
+      <p>Chatpit is now in beta mode. Chatpit messenger give you the freedom to chat with anonymous  </p>
       <p>Do not use your real name unless you know her/him very well. 
      * one time login Account will self destruct after log out, 
       you can use any email & user name for sign up,

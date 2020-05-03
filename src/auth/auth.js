@@ -28,7 +28,7 @@ class Auth extends Component {
       signupEmail: "",
       signupPassword: "",
       signupRepass: "",
-
+      mode:{},
       loginPassword: "",
       loginEmail: "",
     };
@@ -41,9 +41,9 @@ class Auth extends Component {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          localStorage.setItem("token", `Bearer ${data.token}`);
-          localStorage.setItem("device", data.device_key);
-          localStorage.setItem("uid", data.user_id);
+          sessionStorage.setItem("token", `Bearer ${data.token}`);
+          sessionStorage.setItem("device", data.device_key);
+          sessionStorage.setItem("uid", data.user_id);
           data.success && (window.location = "/");
           data.error && alert(data.message);
         })
@@ -51,13 +51,15 @@ class Auth extends Component {
     }
     console.log(response);
   };
-  componentDidMount() {    
+  componentDidMount() {  
+    document.title = 'Login into Chatpit | Chatpit'  
     const data = {
       mode: "light",
-      bgColor: "#eeeeee",
+      // bgColor: "#eeeeee",
     };
     this.setState({ mode: data });
-    localStorage.setItem("chat_mode", JSON.stringify(data));
+    if(!localStorage.getItem('chat_mode')){
+    localStorage.setItem("chat_mode", JSON.stringify(data))}
   }
   componentWillReceiveProps(nextProps) {}
 
@@ -109,9 +111,9 @@ class Auth extends Component {
     })
     .then(res=>{res.json().then(data=>{
       console.log(data)
-      localStorage.setItem("token", `Bearer ${data.token}`);
-          localStorage.setItem("device", data.device_key);
-          localStorage.setItem("uid", data.user_id);
+      sessionStorage.setItem("token", `Bearer ${data.token}`);
+          sessionStorage.setItem("device", data.device_key);
+          sessionStorage.setItem("uid", data.user_id);
           data.success && (window.location = "/");
           data.error && alert(data.message);
     }
@@ -120,12 +122,13 @@ class Auth extends Component {
   };
   render() {
     const { classes } = this.props;
+// console.log(this.state.mode.mode);
 
     return (
       <ThemeProvider
         theme={createMuiTheme({
           palette: {
-            // type: this.state.mode,
+            type: this.state.mode.mode,
             primary: {
               main: "#fdd835",
               // dark:"#000"
@@ -133,18 +136,16 @@ class Auth extends Component {
             secondary: {
               main: "#ffb300",
             },
-            type: "dark",
+            // type: "dark",
           },
         })}
       >
         <Grid
           container
-          
           style={{
             minHeight: "100vh",
             textAlign:'center',
-            background:
-              "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)",
+            background: "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)",
           }}
         >
           <Grid item xs={12} md={4}>

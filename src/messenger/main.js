@@ -128,6 +128,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer() {
+  // useEffect(() => {
+  //   document.title="Messenger | Chatpit"
+    
+  // }, []);
+  
+    
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);

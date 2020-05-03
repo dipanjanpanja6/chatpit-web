@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  Grid,
-  Paper,
-
-
-} from "@material-ui/core";
+import {Grid} from "@material-ui/core";
 
 import PropType from "prop-types";
 
@@ -28,6 +23,7 @@ class Home extends Component {
     };
   }
   componentDidMount() {
+    document.title="Chatpit"
     this.props.getPosts();
     // console.log('home');
     
@@ -87,12 +83,11 @@ class Home extends Component {
     return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
-          <Paper>
-            {/* <ImageSlider /> */}
-          </Paper>
+        
+          <SoutBox key =' home_shoutBox' hight='67vh' />
         </Grid>
 
-        <Grid item xs={12} md={7} lg={6}>
+        <Grid className={classes.postGrid} item xs={12} md={7} lg={6}>
           <NewPost  key = 'home_newPost' />
           {postsList}
           <hr />
@@ -100,7 +95,6 @@ class Home extends Component {
 
         <Grid item xs={12} md={12} lg={3} >
           {/* <AnonymousToSpecific  key = 'home_anonymous' hight='50vh' /> */}
-          <SoutBox key =' home_shoutBox' hight='67vh' />
 
           <CopyRight  key ='home_copyright' />
         </Grid>
@@ -116,7 +110,16 @@ const style = (theme) => ({
    
   },
   msgList: {},
-
+postGrid:{
+  height:'calc(100vh - 70px)',
+  overflow:'auto',
+  'scrollbar-width': 'none', /* Firefox */
+  '-ms-overflow-style': ' none',  /* IE 10+ */
+  '&::-webkit-scrollbar': {
+    width: '0px',
+    background: 'transparent' /* Chrome/Safari/Webkit */
+  }
+}
 });
 
 Home.propType = {

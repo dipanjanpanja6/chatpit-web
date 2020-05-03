@@ -29,12 +29,12 @@ import PropType from "prop-types";
 import clsx from "clsx";
 import SkeletonC from "./SkeletonCmnt";
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 class postCard extends Component {
   constructor() {
     super();
-    this.uid = localStorage.getItem("uid");
+    this.uid = sessionStorage.getItem("uid");
     this.state = {
       expanded: false,
       anchorEl: null,
@@ -90,7 +90,7 @@ class postCard extends Component {
   };
   deletePost = () => {
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const postID = this.props.postID;
     fetch(`${url}/post/${postID}/delete`, {
       method: "DELETE",

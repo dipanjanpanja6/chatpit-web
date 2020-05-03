@@ -2,7 +2,7 @@ import { url } from "../../config/config";
 import { GET_ALL_POST,NEW_POST,POST_NULL } from "../type";
 
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 
 export const getPosts = () => (dispatch) => {

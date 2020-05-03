@@ -21,6 +21,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import SettingsIcon from "@material-ui/icons/Settings";
 import EditIcon from "@material-ui/icons/Edit";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
@@ -33,7 +34,7 @@ import DialogFile from "../component/Dialog File";
 import { url } from "../config/config";
 import { toast } from 'react-toastify';
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 class Layout extends Component {
   constructor() {
@@ -76,6 +77,7 @@ class Layout extends Component {
       });
   };
   componentWillMount() {
+    document.title="Profile - Chatpit"
     this.props.getProfile();
     this.getPost();
     const f = localStorage.getItem('chat_mode')
@@ -109,7 +111,8 @@ class Layout extends Component {
     }
   }
   signOut = () => {
-    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.removeItem('shout_name');
     window.location = "/auth";
   };
   handleClick = () => {
@@ -210,7 +213,7 @@ class Layout extends Component {
     if (mode === 'light'){
       const data = {
         mode:'dark',
-        bgColor:'#000000'
+        bgColor:'#000'
       };
       localStorage.setItem('chat_mode', JSON.stringify(data))
       this.setState({
@@ -226,7 +229,7 @@ class Layout extends Component {
       });
       const data = {
         mode:'light',
-        bgColor:'#eeeeee'
+        // bgColor:'#eeeeee'
       };
       localStorage.setItem('chat_mode', JSON.stringify(data))
       window.location.reload()
@@ -276,13 +279,13 @@ class Layout extends Component {
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText color='' style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode === 'dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="Sign out" />
+              <ListItemText className={classes.listText} primary="Sign out" />
             </ListItem>
             <ListItem onClick={this.handleMode} button>
               <ListItemIcon>
                 <Brightness4Icon />
               </ListItemIcon>
-              <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary={this.state.modeState} />
+              <ListItemText className={classes.listText} primary={this.state.modeState} />
             </ListItem>
 
             {/* <ListItem button>Add details</ListItem> */}
@@ -291,8 +294,8 @@ class Layout extends Component {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="Settings"/>
-              {open ? <ExpandLess style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}}/> : <ExpandMore style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}}/>}
+              <ListItemText className={classes.listText} primary="Settings"/>
+              {open ? <ExpandLess className={classes.listText}/> : <ExpandMore className={classes.listText}/>}
             </ListItem>
 
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -305,7 +308,7 @@ class Layout extends Component {
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>
-                  <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="update user name" />
+                  <ListItemText className={classes.listText} primary="Change User Name" />
                 </ListItem>
                 <ListItem
                   button
@@ -315,7 +318,17 @@ class Layout extends Component {
                   <ListItemIcon>
                     <AddPhotoAlternateIcon />
                   </ListItemIcon>
-                  <ListItemText style={{color:mode === 'light' ? 'rgba(0,0,0,0.54)':mode==='dark' ? 'rgba(255,255,255,0.7)':'rgba(255,255,255,0.7)'}} primary="update user image" />
+                  <ListItemText className={classes.listText} primary="Update Profile Picture" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={this.moreSettings}
+                >
+                  <ListItemIcon>
+                    <MoreHorizIcon />
+                  </ListItemIcon>
+                  <ListItemText className={classes.listText} primary="More settings" />
                 </ListItem>
               </List>
             </Collapse>
@@ -337,7 +350,6 @@ class Layout extends Component {
                     className={classes.title}
                     variant="h4"
                   >
-                    {" "}
                     {userProfile.name}
                   </Typography>
                   <Typography
@@ -345,7 +357,7 @@ class Layout extends Component {
                     color="textSecondary"
                     variant="subtitle1"
                   >
-                    I'm 20 years old
+                   here you can add Bio
                   </Typography>
                   <Typography
                     align="center"
@@ -422,6 +434,9 @@ const style = (theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  listText:{
+    color : theme.palette.text.primary
+  }
 });
 
 Layout.propType = {

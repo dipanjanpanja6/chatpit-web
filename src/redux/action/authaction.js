@@ -2,8 +2,8 @@ import { SET_LOGIN_SUCCESS, SET_LOGIN_ERROR } from "../type";
 import { url } from "../../config/config";
 import { AUTHORIZATION } from "../type";
 
-const token = localStorage.getItem("token");
-const deviceKEY = localStorage.getItem("device");
+const token = sessionStorage.getItem("token");
+const deviceKEY = sessionStorage.getItem("device");
 
 
 export const signUp = (data) => (dispatch) => {
@@ -15,9 +15,9 @@ export const signUp = (data) => (dispatch) => {
     .then((res) => {
       res.json().then((data) => {
         console.log(data);
-        localStorage.setItem("token", `Bearer ${data.token}`);
-        localStorage.setItem("device", data.device_key);
-        localStorage.setItem("uid", data.user_id);
+        sessionStorage.setItem("token", `Bearer ${data.token}`);
+        sessionStorage.setItem("device", data.device_key);
+        sessionStorage.setItem("uid", data.user_id);
         {data.error && alert(data.message)}
         {data.success && 
         dispatch(createToken(data.user_id,data.device_key));}
@@ -38,9 +38,9 @@ export const login = (data) => (dispatch) => {
     .then((res) => {
       res.json().then((data) => {
         console.log(data);
-        localStorage.setItem("token", `Bearer ${data.token}`);
-        localStorage.setItem("device", data.device_key);
-        localStorage.setItem("uid", data.user_id);
+        sessionStorage.setItem("token", `Bearer ${data.token}`);
+        sessionStorage.setItem("device", data.device_key);
+        sessionStorage.setItem("uid", data.user_id);
 
         // data.success && dispatch(createToken(data.user_id, data.device_key));
         data.success && (window.location = "/");
@@ -85,6 +85,8 @@ export const checkAuthenticated=()=>(dispatch)=>{
   .then((res)=>{res.json().then((data)=>{
     console.log(data);
     if(data.authorized){
+      localStorage.shout_name=data.name;
+      sessionStorage.isAnonymous=data.isAnonymous;
     dispatch({
       type:AUTHORIZATION,
       payload:data.authorized
