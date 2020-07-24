@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import {Toolbar,Grid,Typography} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-import ChatMsg from "./ChatMsg";
 import ConversationHead from "./ConversationHead";
 import ChatsHeader from "./ChatList";
-import ChatBar from "./ChatBar";
 import ChatSet from "./ChatsHeader";
+import Chat from './Chat'
+import { url } from '../config/config'
+import io from 'socket.io-client'
+import { connect } from "react-redux";
+import { getProfile } from "../redux/action/userAction";
+import PropType from 'prop-types';
+import { toast } from 'react-toastify';
+
+
+const messenger = io(`${url}/messenger`)
+const token = sessionStorage.getItem("token");
 
 const drawerWidth = 300;
 
@@ -50,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 0,
   },
   hide: {
     display: "none",
@@ -89,9 +97,8 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(2, 1),
+    justifyContent: 'space-between',
+    padding: theme.spacing(1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
@@ -99,44 +106,89 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     // padding: theme.spacing(3),
   },
-  footer: {
-    bottom: 0,
-    right: 0,
-    left:'80px',
-    position: "fixed",
-    height: 52,
-    width:`calc(100vw - ${theme.spacing(13)}px )`,
-    display: "flex",
-    alignItems: "center",
-    border: "none",
-    padding: "0 8px",
-    background: "white",
-  },
   chatMsg: {
     marginBottom: "40px",
   },
-  scroll:{
-    paddingTop:'20px',
-    overflow:'auto',
+  scroll: {
+    paddingTop: '20px',
+    overflowX: 'hidden',
     scrollbarWidth: 'none', /* Firefox */
     '-ms-overflow-style': 'none', /* IE 10+ */
-    '&::-webkit-scrollbar' : {
+    '&::-webkit-scrollbar': {
       width: '0px',
       background: 'transparent', /* Chrome/Safari/Webkit */
     }
   }
 }));
 
-export default function MiniDrawer() {
-  // useEffect(() => {
-  //   document.title="Messenger | Chatpit"
-    
-  // }, []);
+
+function MiniDrawer(props) {
+
   
+  // console.log(props);
+  if(props.auth.auth==false){
+    window.location="/auth"
+  }
+  const uid = props.auth.auth.uid;
+  let name = "";
+  let [ChatList, setChatList] = React.useState(null);
+  let userProfile;
+  if(props.auth.auth){
+  if (props.user.userProfile) {
     
+    userProfile = props.user.userProfile.user.userImage;
+    name = props.user.userProfile.user.name
+  }}
+  // let chatListFEtch=null;
+  // setUserImage(props.user.userProfile)
+  // console.log(userImage);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `Messenger - Chatpit`;
+    props.getProfile();
+
+    fetch(`${url}/messenger/chatList`, {
+      method: 'GET',
+      headers: { Authorization: token }
+    }).then(res => {
+      res.json().then(d => {
+        console.log(d);
+        if(d.authorized===false){toast.error(d.error);window.location="/auth"}
+        else if (d !== null) {
+          setChatList(Object.values(d));
+        } else {
+          setChatList([])
+        }
+      })
+
+    }).catch(r => console.log(r))
+
+
+  }, []);
+
+  useEffect(() => {
+
+  })
+
+  useEffect(() => {
+
+    // messenger.emit('login', uid)
+    // messenger.emit('chatListUpdate', uid)
+
+
+  }, [uid])
+
+
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [chatBox, setChatBox] = React.useState(null);
+  const [activeUser, setActiveUser] = React.useState({
+    name: "Welcome to Chatpit Messenger " + name,
+    image: "",
+    status: "Select or Add any User first"
+  });
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -146,12 +198,68 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const chatSearch = (e) => {
+    if (e !== "") {
+      fetch(`${url}/messenger/add/${e}`, {
+        method: 'POST',
+        headers: { AUTHORIZATION: token },
+      }).then(res => {
+        res.json().then(d => {
+          console.log(d);
+          if (d.success) {
+            fetch(`${url}/messenger/chatList`, {
+              method: 'GET',
+              headers: { Authorization: token }
+            }).then(res => {
+              res.json().then(d => {
+                console.log(Object.values(d));
+
+                setChatList(Object.values(d));
+              })
+
+            }).catch(r => console.log(r))
+          } else {
+            toast.error(d.message)
+          }
+        })
+      })
+    }
+    console.log(e);
+  }
+  const goto = (e) => {
+    console.log(e);
+    setChatBox(
+      e)
+    // setActiveImage(e.sImage);
+    // setActiveName(e.sName);
+    // setActiveStatus("");
+    setActiveUser({
+      name: e.sName,
+      image: e.sImage,
+      status: e.status
+    });
+
+  }
+
+  const xxxx = chatBox ?
+    (
+    <Chat key={chatBox.chatId} data={chatBox}/>
+      ) : <Grid container justify="flex-end">
+        <Grid item style={{height:'calc(100vh - 142px)'}}>
+
+      <Typography style={{paddingTop:'142px',textAlign:"center"}} variant="h5">
+          Welcome to Chatpit Messenger
+          Welcome to Chatpit Messenger
+          Welcome to Chatpit Messenger
+      </Typography>
+        </Grid>
+  </Grid>
+
   return (
+
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        elevation={0}
+      <AppBar position="fixed" elevation={0}
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
@@ -159,7 +267,6 @@ export default function MiniDrawer() {
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, {
@@ -169,7 +276,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
 
-          <ConversationHead />
+          <ConversationHead user={activeUser} />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -186,49 +293,53 @@ export default function MiniDrawer() {
         }}
       >
         <div className={classes.toolbar}>
-          <ChatSet />
-          <IconButton style={{padding:5}} onClick={handleDrawerClose}>
+          {/* //////////////////////////////////////////////////////// */}
+          <ChatSet submit={chatSearch} name={name} userImage={userProfile} />
+
+          <IconButton style={{ padding: 10 }} onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
-              <ChevronLeftIcon />
-            )}
+                <ChevronLeftIcon />
+              )}
           </IconButton>
         </div>
         <Divider />
         <div className={classes.scroll}>
-        <ChatsHeader/>
-        <div className={classes.toolbar} />
+          {/* ///////////////////////////////////////////////////////////// */}
+          <ChatsHeader ChatList={ChatList} goto={goto} />
+          <div className={classes.toolbar} />
         </div>
-        
+
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {/* <div className={classes.toolbar} /> */}
-        <div className={classes.chatMsg}>
-          <Typography className={classes.date}>fri 1:46 PM</Typography>
-          <ChatMsg
-            avatar={""}
-            messages={[
-              "Im good.",
-              "See u later.",
-              {
-                type: "image",
-                alt: "sticker",
-                src:
-                  "https://scontent.fbkk12-3.fna.fbcdn.net/v/t39.1997-6/47165057_2150118098374296_5034322199196991488_n.png?_nc_cat=1&_nc_eui2=AeGsL8WciYpwOySYRQINElIdV9NubJ7ZbWTW9J5-DlXHPiLCKR8Zvvd4nVyPH4Wa8kceFiL10mXvokNFcEJx9JWz-6XLYgCLmOgTniFDbSjUPw&_nc_ohc=pewFeK6M1ZIAQkL5L9QR2FZcwYjZ0FTWid2zHeUqboLU4azOITkLVGaog&_nc_ht=scontent.fbkk12-3.fna&oh=27a2a48aabccd4cdae4ec4f3f775daa9&oe=5EAF0F3B",
-              },
-            ]}
-          />
-          <ChatMsg messages={["hello", "hi", "how r u?"]} side={"right"} />
-          <ChatMsg messages={["hello", "i am fine bro", "how r u?"]} />
-          <ChatMsg messages={["good"]} side={"right"} />
-          <ChatBar />
+        {/* <div className={classes.chatMsg}> */}
+        <div>
+          {xxxx}
         </div>
-
-        {/* <div className={classes.footer}> */}
-        {/* </div> */}
       </main>
     </div>
   );
+
 }
+
+
+const mapState = (state) => ({
+  auth: state.auth,
+  user: state.user,
+});
+const mapActionToProps = {
+  getProfile,
+
+}
+MiniDrawer.defaultProps = {
+  // user:{}
+}
+MiniDrawer.propType = {
+
+  getProfile: PropType.func.isRequired,
+  user: PropType.object.isRequired,
+};
+export default connect(mapState, mapActionToProps)(MiniDrawer)
+

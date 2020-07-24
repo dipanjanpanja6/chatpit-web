@@ -45,7 +45,9 @@ class postCard extends Component {
       allCmnt: null,
     };
   }
-  
+  componentWillUnmount=()=>{
+    
+  }
   componentDidMount = () => {
     this.setState({ likeCount: this.props.likeCount });
     const postID = this.props.postID;
@@ -183,7 +185,7 @@ class postCard extends Component {
     const AllCmnt = allCmnt ? (
       allCmnt.map((p) => {
         return (
-          <Grid className={classes.commentG} container justify="flex-start">
+          <Grid key={p.comment_id} className={classes.commentG} container justify="flex-start">
             <Avatar className={classes.small} src={p.comment_by_userImage} />
             <Paper className={classes.commentP}>
               <ListItemText
@@ -242,16 +244,15 @@ class postCard extends Component {
                 {liked && <FavoriteIcon color="error" />}
                 {!liked && <FavoriteIcon />}
               </IconButton>
-              <IconButton aria-label="share">
+              {/* <IconButton aria-label="share">
                 <ShareIcon />
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
                 })}
                 onClick={this.handleExpandClick}
-                // aria-expanded={expanded}
-                aria-label="show more"
+                
               >
                 <ExpandMoreIcon />
               </IconButton>
@@ -263,6 +264,11 @@ class postCard extends Component {
                 <InputBase
                   className={classes.input}
                   onChange={this.handleCmntChnge}
+                  onKeyDown={(e)=>{
+                    if(e.keyCode===13){
+                      this.cmntSend()
+                    }
+                  }}
                   value={cmnt}
                   multiline={true}
                   fullWidth={true}
@@ -277,7 +283,7 @@ class postCard extends Component {
                       {
                         onClick: this.cmntSend,
                         style: { padding: 0 },
-                        button: true,
+                        button:"true",
                       },
                       React.createElement(SendIcon, { className: classes.icon ,color:'secondary',})
                     )

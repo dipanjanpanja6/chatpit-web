@@ -31,6 +31,8 @@ import Sceleton from "../component/posts/sceleton";
 
 import DialogFrom from "../component/Dialog";
 import DialogFile from "../component/Dialog File";
+import Settings from '../component/SettingsDialog'
+
 import { url } from "../config/config";
 import { toast } from 'react-toastify';
 
@@ -49,7 +51,8 @@ class Layout extends Component {
       label: "",
       posts: null,
       mode:'light',
-      modeState:'Dark Mode'
+      modeState:'Dark Mode',
+      SettingsOpen:false
     };
   }
   getPost = () => {
@@ -212,10 +215,10 @@ class Layout extends Component {
     const {mode} = this.state;
     if (mode === 'light'){
       const data = {
-        mode:'dark',
-        bgColor:'#000'
+        mode:'dark'
       };
       localStorage.setItem('chat_mode', JSON.stringify(data))
+      localStorage.setItem('bgColor', '#000')
       this.setState({
         mode:'dark',
         modeState:'Light Mode'
@@ -232,9 +235,16 @@ class Layout extends Component {
         // bgColor:'#eeeeee'
       };
       localStorage.setItem('chat_mode', JSON.stringify(data))
+      localStorage.removeItem('bgColor')
       window.location.reload()
     }
   };
+
+  moreSettings=()=>{
+this.setState({SettingsOpen:!this.state.SettingsOpen})
+}
+
+
   render() {
     const { classes } = this.props;
     const {mode} = this.state
@@ -279,7 +289,7 @@ class Layout extends Component {
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText className={classes.listText} primary="Sign out" />
+              <ListItemText className={classes.listText} primary="Goodbye" />
             </ListItem>
             <ListItem onClick={this.handleMode} button>
               <ListItemIcon>
@@ -406,6 +416,10 @@ class Layout extends Component {
           handleClose={this.handleClose}
           odf={openDialogF}
           e={this.updateDpp}
+        />
+        <Settings
+        open={this.state.SettingsOpen}
+        settingsClosed={this.moreSettings}
         />
       </Grid>
     );

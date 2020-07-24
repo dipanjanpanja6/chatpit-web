@@ -89,7 +89,7 @@ export const checkAuthenticated=()=>(dispatch)=>{
       sessionStorage.isAnonymous=data.isAnonymous;
     dispatch({
       type:AUTHORIZATION,
-      payload:data.authorized
+      payload:data
     })
   }else{
     window.location="/auth"

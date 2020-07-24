@@ -147,7 +147,7 @@ const ChatMsg = ({avatar,messages,side}) => {
 
 ChatMsg.propTypes = {
   avatar: PropTypes.string,
-  messages: PropTypes.arrayOf(PropTypes.string),
+  // messages: PropTypes.arrayOf(PropTypes.string),
   side: PropTypes.oneOf(['left', 'right'])
 };
 ChatMsg.defaultProps = {

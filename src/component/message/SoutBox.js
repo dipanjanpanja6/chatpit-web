@@ -45,59 +45,64 @@ const style = (theme) => ({
     marginTop: "12px",
     fontSize: 13,
   },
-msgList:{
-  'scrollbar-width': 'none', /* Firefox */
-  '-ms-overflow-style':' none',  /* IE 10+ */
-  '&::-webkit-scrollbar': {
-    width: '0px',
-    background: 'transparent' /* Chrome/Safari/Webkit */
+  msgList: {
+    'scrollbar-width': 'none', /* Firefox */
+    '-ms-overflow-style': ' none',  /* IE 10+ */
+    '&::-webkit-scrollbar': {
+      width: '0px',
+      background: 'transparent' /* Chrome/Safari/Webkit */
+    }
   }
-}
 });
 const ke = Math.random() * 21;
 const config: Config = {
   dictionaries: [names], length: 1
 }
 const nam = uniqueNamesGenerator(config)
-const BoxServer = io(`${url}`)
+const BoxServer = io(`${url}/shoutBox`)
 
 class Soutbox extends Component {
   constructor() {
     super();
-
     this.state = {
       msg: '',
       rMsg: []
     }
   }
-
+  componentWillUnmount = () => {
+    // BoxServer.disconnect()
+  }
   componentDidMount = () => {
     // console.log(localStorage.getItem("shout_name"));
-    
-    if (localStorage.getItem("shout_name") == null){
+
+    if (localStorage.getItem("shout_name") == null) {
       localStorage.setItem("shout_name", nam);
 
     }
 
-    console.log("mount");
-    BoxServer.on('io',(d)=>{console.log(d)})
-    BoxServer.on('em',(d)=>{console.log(d)})
-    BoxServer.on('br',(d)=>{console.log(d)})
-    BoxServer.emit('login','login success')
-    BoxServer.on('message',(d)=>{ this.setState({rMsg:[...this.state.rMsg,d]})})
-    BoxServer.on('shouts',(d)=>{
-      
+    // console.log("mount");
+    BoxServer.on('io', (d) => { console.log(d) })
+    BoxServer.on('em', (d) => { console.log(d) })
+    BoxServer.on('br', (d) => { console.log(d) })
+    BoxServer.emit('login', 'login success')
+    BoxServer.on('message', (d) => {
       // console.log(d);
-      this.setState({rMsg:[...d]})
-      
+
+      this.setState({ rMsg: [...this.state.rMsg, d] })
     })
-    BoxServer.on('shoutsb',(d)=>{console.log(d)})
+    BoxServer.on('shouts', (d) => {
+
+      // console.log(d);
+      this.setState({ rMsg: [...d] })
+
+    })
+    BoxServer.on('shoutsb', (d) => { console.log(d) })
 
     this.scrollToBottom()
   }
 
   componentDidUpdate() {
-    console.log('update');
+    // console.log('update');
     // shoutBoxServer.on('new user connwcted', (d) => {
     //   console.log(d)
     // });
@@ -106,20 +111,20 @@ class Soutbox extends Component {
   handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value })
   }
-  keyDown=(e)=>{
-    if(e.keyCode == 13){
+  keyDown = (e) => {
+    if (e.keyCode == 13) {
       this.setState({ [e.target.id]: e.target.value })
-        this.Send()
-     }
+      this.Send()
+    }
   }
-  Send =  (e) => {
+  Send = (e) => {
     var message = this.state.msg
     var uid = ke
     var name = localStorage.getItem("shout_name") ? localStorage.getItem("shout_name") : nam
-    
-    console.log(nam);
-    
-     message && BoxServer.emit('send_shout',{ message, uid, name })
+
+    // console.log(name);
+
+    message && BoxServer.emit('send_shout', { message, uid, name })
 
     this.setState({ msg: "" })
   }
@@ -136,10 +141,10 @@ class Soutbox extends Component {
 
     const { msg, rMsg } = this.state
     // console.log(rMsg);
-    
+
     const SoutMessage = rMsg ? rMsg.map(p => {
       // console.log(p)
-      
+
       return (
         <div key={Math.random() * 5} className={classes.msg}>
           <Grid container spacing={1} justify="flex-start" alignItems='center'>
@@ -147,20 +152,20 @@ class Soutbox extends Component {
               <Typography style={{ fontSize: '11px', color: '#03f' }} variant='subtitle2'>{`[${p.dates},${p.times}]`}
               </Typography>
             </Grid>
-           
+
             <Grid item>
               <Typography style={{ fontSize: "13px", color: '#0c0', fontWeight: " 600" }}>
                 {p.name}
               </Typography>
             </Grid>
             <Grid item >
-            <Typography style={{ fontFamily: "monospace", }}>
-              {p.message}
-            </Typography>
+              <Typography style={{ fontFamily: "monospace", }}>
+                {p.message}
+              </Typography>
             </Grid>
           </Grid>
 
-          
+
         </div>
       )
     }) : ""

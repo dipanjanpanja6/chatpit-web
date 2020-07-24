@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { url } from '../config/config'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Tab, Tabs, Grid, AppBar, Typography, } from "@material-ui/core";
+import { Tab, Tabs, Grid, AppBar, Typography,Badge } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import PropType from "prop-types";
@@ -22,7 +22,7 @@ import Layout from "../profile/index";
 import Loading from "../loading/loading";
 const style = (theme) => ({
   typo: {
-    padding: '20px 20px 10px', minHeight: 'calc(100vh - 96px)', overflow: 'auto',
+    padding: '20px 20px 10px', minHeight: 'calc(100vh - 78px)', overflow: 'auto',
    
   }
 });
@@ -67,11 +67,11 @@ class appBar extends Component {
 
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.auth) {
+    if (nextProps.auth.auth.authorized) {
       console.log(nextProps.auth);
 
       this.setState({
-        auth: nextProps.auth.auth,
+        auth: nextProps.auth.auth.authorized,
       });
     }
     if (nextProps.auth.mode) {
@@ -127,9 +127,9 @@ class appBar extends Component {
                   centered
                 >
                   <Tab icon={<HomeIcon />} />
-                  <Tab icon={<ForumOutlinedIcon />} />
-                  <Tab icon={<NotificationsIcon />} />
-                  <Tab icon={<AccountCircleIcon />} />
+                  <Tab icon={ <Badge  badgeContent={4} color="error"> <ForumOutlinedIcon /></Badge>} />
+                  <Tab icon={ <Badge  badgeContent={4} color="error"> <NotificationsIcon /> </Badge>} />
+                  <Tab icon={ <AccountCircleIcon />} />
                 </Tabs>
               </AppBar>
               {value === 0 && (

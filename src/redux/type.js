@@ -15,4 +15,3 @@ export const POST_NULL = "POST_NULL"
 
 
 
-export const MODE ="MODE"

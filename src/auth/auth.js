@@ -63,18 +63,10 @@ class Auth extends Component {
   }
   componentWillReceiveProps(nextProps) {}
 
-  handleChangeSignUpUsername = (e) => {
+  handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
-  handleSignUpEmailChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
-  handlePasswordChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
-  handleRePasswordChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
+
   handleSignUp = (e) => {
     e.preventDefault();
     const data = {
@@ -85,14 +77,10 @@ class Auth extends Component {
     };
     this.props.signUp(data);
 
-    signUp(data);
+    // signUp(data);
   };
-  handleEmailChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
-  handlePasswordChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
+
+
   handleLogin = (e) => {
     e.preventDefault();
     const data = {
@@ -163,7 +151,7 @@ class Auth extends Component {
                     size="small"
                     id="signUpUserName"
                     value={this.state.signUpUserName}
-                    onChange={this.handleChangeSignUpUsername}
+                    onChange={this.handleChange}
                     placeholder="User name"
                     required
                     autoFocus
@@ -179,7 +167,7 @@ class Auth extends Component {
                     id="signupEmail"
                     placeholder="Email address"
                     value={this.state.signupEmail}
-                    onChange={this.handleSignUpEmailChange}
+                    onChange={this.handleChange}
                   />
                   <br />
                   <TextField
@@ -191,7 +179,7 @@ class Auth extends Component {
                     variant="outlined"
                     id="signupPassword"
                     value={this.state.signupPassword}
-                    onChange={this.handlePasswordChange}
+                    onChange={this.handleChange}
                   />
                   <br />
                   <TextField
@@ -202,7 +190,7 @@ class Auth extends Component {
                     id="signupRepass"
                     value={this.state.signupRepass}
                     variant="outlined"
-                    onChange={this.handleRePasswordChange}
+                    onChange={this.handleChange}
                   />
                   <br />
                   <Button
@@ -230,7 +218,7 @@ class Auth extends Component {
                     id="loginEmail"
                     placeholder="Email address"
                     value={this.state.email}
-                    onChange={this.handleEmailChange}
+                    onChange={this.handleChange}
                   />
                   <br />
                   <TextField
@@ -241,7 +229,7 @@ class Auth extends Component {
                     // size='small'
                     variant="outlined"
                     id="loginPassword"
-                    onChange={this.handlePasswordChange}
+                    onChange={this.handleChange}
                   />
                   <br />
                   <Button
@@ -306,7 +294,7 @@ class Auth extends Component {
                 onSuccess={this.responseGoogle}
                 onFailure={this.responseGoogle}
                 cookiePolicy={"single_host_origin"}
-              />
+              /><br/><br/>
               <Divider />
               <CopyRight />
             </Paper>
@@ -317,7 +305,7 @@ class Auth extends Component {
                 margin: "16px",
               }}
             >
-              {/* <AnonymousToSpecific key =' auth_anonymous' hight='63vh' /> */}
+              <AnonymousToSpecific key =' auth_anonymous' hight='63vh' />
             </div>
           </Grid>
           <Grid xs={12} md={4} item>

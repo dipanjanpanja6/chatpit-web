@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Grid} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import PropType from "prop-types";
 
@@ -23,10 +23,10 @@ class Home extends Component {
     };
   }
   componentDidMount() {
-    document.title="Chatpit"
+    document.title = "Chatpit"
     this.props.getPosts();
     // console.log('home');
-    
+
   }
   componentWillReceiveProps(nextProps) {
     // console.log(nextProps.auth.auth);
@@ -83,12 +83,12 @@ class Home extends Component {
     return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item className={classes.msgList} xs={12} md={5} lg={3}>
-        
-          <SoutBox key =' home_shoutBox' hight='67vh' />
+
+          <SoutBox key=' home_shoutBox' hight='67vh' />
         </Grid>
 
         <Grid className={classes.postGrid} item xs={12} md={7} lg={6}>
-          <NewPost  key = 'home_newPost' />
+          <NewPost key='home_newPost' />
           {postsList}
           <hr />
         </Grid>
@@ -96,7 +96,7 @@ class Home extends Component {
         <Grid item xs={12} md={12} lg={3} >
           {/* <AnonymousToSpecific  key = 'home_anonymous' hight='50vh' /> */}
 
-          <CopyRight  key ='home_copyright' />
+          <CopyRight key='home_copyright' />
         </Grid>
       </Grid>
     );
@@ -107,19 +107,19 @@ class Home extends Component {
 const style = (theme) => ({
   root: {
     flexGrow: 1,
-   
+
   },
   msgList: {},
-postGrid:{
-  height:'calc(100vh - 70px)',
-  overflow:'auto',
-  'scrollbar-width': 'none', /* Firefox */
-  '-ms-overflow-style': ' none',  /* IE 10+ */
-  '&::-webkit-scrollbar': {
-    width: '0px',
-    background: 'transparent' /* Chrome/Safari/Webkit */
+  postGrid: {
+    // height: 'calc(100vh - 70px)',
+    // overflow: 'auto',
+    'scrollbar-width': 'none', /* Firefox */
+    '-ms-overflow-style': ' none',  /* IE 10+ */
+    '&::-webkit-scrollbar': {
+      width: '0px',
+      background: 'transparent' /* Chrome/Safari/Webkit */
+    }
   }
-}
 });
 
 Home.propType = {

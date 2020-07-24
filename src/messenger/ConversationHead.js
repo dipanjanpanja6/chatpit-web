@@ -15,10 +15,11 @@ const useStyles = makeStyles(() => ({
     display: 'inline-flex'
   },
   root: {
-    padding: '8px 8px 8px 16px'
+    padding: '8px 8px 8px 4px'
   },
   primary: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize:12
   },
   secondary: {
     fontSize: 12
@@ -30,23 +31,24 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ConversationHead = () => {
+const ConversationHead = (props) => {
+  // console.log(props);
   const styles = useStyles();
   return (
 
     <ListItem ContainerComponent='div' ContainerProps={{ className: styles.container }} className={styles.root}>
-      <ListItemAvatar>
-        <Avatar src='https://i.pravatar.cc/300?img=13' />
-      </ListItemAvatar>
-      <ListItemText primary='Rex3to' secondary='online' />
+      {props.user.image && <ListItemAvatar>
+        <Avatar src={props.user.image} />
+      </ListItemAvatar>}
+      <ListItemText  secondaryTypographyProps={{style:{fontSize:"12px"}}} primaryTypographyProps={{style:{fontSize:"14px"}}} primary={props.user.name} secondary={props.user.status? props.user.status : "Loading..."} />
       <ListItemSecondaryAction style={{display:'contents'}}>
-        <IconButton className={styles.iconBtn}>
+        {/* <IconButton disabled className={styles.iconBtn}>
           <Phone />
         </IconButton>
-        <IconButton className={styles.iconBtn}>
+        <IconButton disabled className={styles.iconBtn}>
           <Videocam />
-        </IconButton>
-        <IconButton className={styles.iconBtn}>
+        </IconButton> */}
+        <IconButton disabled className={styles.iconBtn}>
           <Info />
         </IconButton>
       </ListItemSecondaryAction>
