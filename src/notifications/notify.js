@@ -1,18 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react"
 
-
-class Notify extends Component{
-    constructor(){
-        super();
-        this.state={
-
-        }
-    }
-    render(){
-        return(
-            <>
-            </>
-        )
-    }
+class Notify extends Component {
+  constructor() {
+    super()
+    this.state = {}
+  }
+  render() {
+    return <></>
+  }
 }
-export default Notify;
+export default Notify

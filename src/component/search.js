@@ -1,50 +1,49 @@
 // *https://www.registers.service.gov.uk/registers/country/use-the-api*
 // import fetch from 'cross-fetch';
-import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress"
+import TextField from "@material-ui/core/TextField"
+import Autocomplete from "@material-ui/lab/Autocomplete"
+import React from "react"
 
 function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
+  return new Promise(resolve => {
+    setTimeout(resolve, delay)
+  })
 }
 
 export default function Asynchronous() {
-  const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState([]);
-  const loading = open && options.length === 0;
+  const [open, setOpen] = React.useState(false)
+  const [options, setOptions] = React.useState([])
+  const loading = open && options.length === 0
 
   React.useEffect(() => {
-    let active = true;
+    let active = true
 
     if (!loading) {
-      return undefined;
+      return undefined
     }
 
-    (async () => {
-      const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
-      await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
+    const getData = async () => {
+      const response = await fetch("https://country.register.gov.uk/records.json?page-size=5000")
+      await sleep(1e3) // For demo purposes.
+      const countries = await response.json()
 
       if (active) {
-          
-          setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-          console.log(options);
+        setOptions(Object.keys(countries).map(key => countries[key].item[0]))
       }
-    })();
+    }
 
+    getData()
     return () => {
-      active = false;
-    };
-  }, [loading]);
+      active = false
+    }
+  }, [loading])
 
   React.useEffect(() => {
     if (!open) {
-      setOptions([]);
+      setOptions([])
     }
-  }, [open]);
+  }, [open])
 
   return (
     <Autocomplete
@@ -52,21 +51,21 @@ export default function Asynchronous() {
       style={{ width: "210px" }}
       open={open}
       onOpen={() => {
-        setOpen(true);
+        setOpen(true)
       }}
       onClose={() => {
-        setOpen(false);
+        setOpen(false)
       }}
       getOptionSelected={(option, value) => option.name === value.name}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={option => option.name}
       options={options}
       loading={loading}
-      renderInput={(params) => (
+      renderInput={params => (
         <TextField
-        size='small'
+          size="small"
           {...params}
           label="Asynchronous"
-          variant='outlined'
+          variant="outlined"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -79,5 +78,5 @@ export default function Asynchronous() {
         />
       )}
     />
-  );
+  )
 }

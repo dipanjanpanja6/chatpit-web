@@ -1,34 +1,31 @@
-import React, { useEffect, useState } from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import {Toolbar,Grid,Typography} from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { Grid, Toolbar, Typography } from "@material-ui/core"
+import AppBar from "@material-ui/core/AppBar"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import Divider from "@material-ui/core/Divider"
+import Drawer from "@material-ui/core/Drawer"
+import IconButton from "@material-ui/core/IconButton"
+import { makeStyles, useTheme } from "@material-ui/core/styles"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import ChevronRightIcon from "@material-ui/icons/ChevronRight"
+import MenuIcon from "@material-ui/icons/Menu"
+import clsx from "clsx"
+import PropType from "prop-types"
+import React, { useEffect } from "react"
+import { connect } from "react-redux"
+import { toast } from "react-toastify"
+import { url } from "../config/config"
+import { getProfile } from "../redux/action/userAction"
+import Chat from "./Chat"
+import ChatsHeader from "./ChatList"
+import ChatSet from "./ChatsHeader"
+import ConversationHead from "./ConversationHead"
 
-import ConversationHead from "./ConversationHead";
-import ChatsHeader from "./ChatList";
-import ChatSet from "./ChatsHeader";
-import Chat from './Chat'
-import { url } from '../config/config'
-import io from 'socket.io-client'
-import { connect } from "react-redux";
-import { getProfile } from "../redux/action/userAction";
-import PropType from 'prop-types';
-import { toast } from 'react-toastify';
+// const messenger = io(`${url}/messenger`)
+const token = sessionStorage.getItem("token")
 
+const drawerWidth = 300
 
-const messenger = io(`${url}/messenger`)
-const token = sessionStorage.getItem("token");
-
-const drawerWidth = 300;
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
   },
@@ -70,11 +67,8 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
   },
   drawerOpen: {
-    top: "40px",
-
     width: drawerWidth,
-    // top:theme.mixins.toolbar,
-
+    zIndex: theme.zIndex.drawer + 2,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -97,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     display: "flex",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: theme.spacing(1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
@@ -110,160 +104,149 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
   },
   scroll: {
-    paddingTop: '20px',
-    overflowX: 'hidden',
-    scrollbarWidth: 'none', /* Firefox */
-    '-ms-overflow-style': 'none', /* IE 10+ */
-    '&::-webkit-scrollbar': {
-      width: '0px',
-      background: 'transparent', /* Chrome/Safari/Webkit */
-    }
-  }
-}));
-
+    paddingTop: "20px",
+    overflowX: "hidden",
+    scrollbarWidth: "none" /* Firefox */,
+    "-ms-overflow-style": "none" /* IE 10+ */,
+    "&::-webkit-scrollbar": {
+      width: "0px",
+      background: "transparent" /* Chrome/Safari/Webkit */,
+    },
+  },
+}))
 
 function MiniDrawer(props) {
-
-  
   // console.log(props);
-  if(props.auth.auth==false){
-    window.location="/auth"
+  if (props.auth.auth == false) {
+    window.location = "/auth"
   }
-  const uid = props.auth.auth.uid;
-  let name = "";
-  let [ChatList, setChatList] = React.useState(null);
-  let userProfile;
-  if(props.auth.auth){
-  if (props.user.userProfile) {
-    
-    userProfile = props.user.userProfile.user.userImage;
-    name = props.user.userProfile.user.name
-  }}
+  const uid = props.auth.auth.uid
+  let name = ""
+  let [ChatList, setChatList] = React.useState(null)
+  let userProfile
+  if (props.auth.auth) {
+    if (props.user.userProfile) {
+      userProfile = props.user.userProfile.user.userImage
+      name = props.user.userProfile.user.name
+    }
+  }
   // let chatListFEtch=null;
   // setUserImage(props.user.userProfile)
   // console.log(userImage);
 
   useEffect(() => {
     // Update the document title using the browser API
-    document.title = `Messenger - Chatpit`;
-    props.getProfile();
+    document.title = `Messenger - Chatpit`
+    props.getProfile()
 
     fetch(`${url}/messenger/chatList`, {
-      method: 'GET',
-      headers: { Authorization: token }
-    }).then(res => {
-      res.json().then(d => {
-        console.log(d);
-        if(d.authorized===false){toast.error(d.error);window.location="/auth"}
-        else if (d !== null) {
-          setChatList(Object.values(d));
-        } else {
-          setChatList([])
-        }
+      method: "GET",
+      headers: { Authorization: token },
+    })
+      .then(res => {
+        res.json().then(d => {
+          console.log(d)
+          if (d.authorized === false) {
+            toast.error(d.error)
+            window.location = "/auth"
+          } else if (d !== null) {
+            setChatList(Object.values(d))
+          } else {
+            setChatList([])
+          }
+        })
       })
+      .catch(r => console.log(r))
+  }, [])
 
-    }).catch(r => console.log(r))
-
-
-  }, []);
-
-  useEffect(() => {
-
-  })
+  useEffect(() => {})
 
   useEffect(() => {
-
     // messenger.emit('login', uid)
     // messenger.emit('chatListUpdate', uid)
-
-
   }, [uid])
 
-
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [chatBox, setChatBox] = React.useState(null);
+  const classes = useStyles()
+  const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
+  const [chatBox, setChatBox] = React.useState(null)
   const [activeUser, setActiveUser] = React.useState({
     name: "Welcome to Chatpit Messenger " + name,
     image: "",
-    status: "Select or Add any User first"
-  });
+    status: "Select or Add any User first",
+  })
 
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  const chatSearch = (e) => {
+  const chatSearch = e => {
     if (e !== "") {
       fetch(`${url}/messenger/add/${e}`, {
-        method: 'POST',
+        method: "POST",
         headers: { AUTHORIZATION: token },
       }).then(res => {
         res.json().then(d => {
-          console.log(d);
+          console.log(d)
           if (d.success) {
             fetch(`${url}/messenger/chatList`, {
-              method: 'GET',
-              headers: { Authorization: token }
-            }).then(res => {
-              res.json().then(d => {
-                console.log(Object.values(d));
+              method: "GET",
+              headers: { Authorization: token },
+            })
+              .then(res => {
+                res.json().then(d => {
+                  console.log(Object.values(d))
 
-                setChatList(Object.values(d));
+                  setChatList(Object.values(d))
+                })
               })
-
-            }).catch(r => console.log(r))
+              .catch(r => console.log(r))
           } else {
             toast.error(d.message)
           }
         })
       })
     }
-    console.log(e);
+    console.log(e)
   }
-  const goto = (e) => {
-    console.log(e);
-    setChatBox(
-      e)
+  const goto = e => {
+    console.log(e)
+    setChatBox(e)
     // setActiveImage(e.sImage);
     // setActiveName(e.sName);
     // setActiveStatus("");
     setActiveUser({
       name: e.sName,
       image: e.sImage,
-      status: e.status
-    });
-
+      status: e.status,
+    })
   }
 
-  const xxxx = chatBox ?
-    (
-    <Chat key={chatBox.chatId} data={chatBox}/>
-      ) : <Grid container justify="flex-end">
-        <Grid item style={{height:'calc(100vh - 142px)'}}>
-
-      <Typography style={{paddingTop:'142px',textAlign:"center"}} variant="h5">
-          Welcome to Chatpit Messenger
-          Welcome to Chatpit Messenger
-          Welcome to Chatpit Messenger
-      </Typography>
-        </Grid>
-  </Grid>
+  const xxxx = chatBox ? (
+    <Chat key={chatBox.chatId} data={chatBox} />
+  ) : (
+    <Grid container justify="flex-end">
+      <Grid item style={{ height: "calc(100vh - 142px)" }}>
+        <Typography style={{ paddingTop: "142px", textAlign: "center" }} variant="h5">
+          Welcome to Chatpit Messenger Welcome to Chatpit Messenger Welcome to Chatpit Messenger
+        </Typography>
+      </Grid>
+    </Grid>
+  )
 
   return (
-
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" elevation={0}
+      <AppBar
+        position="absolute"
+        elevation={0}
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
-        })}
-      >
+        })}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -271,8 +254,7 @@ function MiniDrawer(props) {
             edge="start"
             className={clsx(classes.menuButton, {
               [classes.hide]: open,
-            })}
-          >
+            })}>
             <MenuIcon />
           </IconButton>
 
@@ -290,18 +272,13 @@ function MiniDrawer(props) {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
           }),
-        }}
-      >
+        }}>
         <div className={classes.toolbar}>
           {/* //////////////////////////////////////////////////////// */}
           <ChatSet submit={chatSearch} name={name} userImage={userProfile} />
 
-          <IconButton style={{ padding: 10 }} onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-                <ChevronLeftIcon />
-              )}
+          <IconButton style={{ padding: 10, alignSelf: "center" }} onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
         <Divider />
@@ -310,36 +287,28 @@ function MiniDrawer(props) {
           <ChatsHeader ChatList={ChatList} goto={goto} />
           <div className={classes.toolbar} />
         </div>
-
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {/* <div className={classes.chatMsg}> */}
-        <div>
-          {xxxx}
-        </div>
+        <div>{xxxx}</div>
       </main>
     </div>
-  );
-
+  )
 }
 
-
-const mapState = (state) => ({
+const mapState = state => ({
   auth: state.auth,
   user: state.user,
-});
+})
 const mapActionToProps = {
   getProfile,
-
 }
 MiniDrawer.defaultProps = {
   // user:{}
 }
 MiniDrawer.propType = {
-
   getProfile: PropType.func.isRequired,
   user: PropType.object.isRequired,
-};
+}
 export default connect(mapState, mapActionToProps)(MiniDrawer)
-

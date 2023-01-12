@@ -1,0 +1,10 @@
+{
+    "javascript.suggest.autoImports": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "cSpell.words": [
+        "Sout",
+        "Soutbox"
+    ]
+}

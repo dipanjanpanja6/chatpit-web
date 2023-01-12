@@ -1,17 +1,17 @@
-import {GET_USER_PROFILE } from "../type";
+import { GET_USER_PROFILE } from "../type"
 
 const initialState = {
-  userProfile:null
-};
+  userProfile: null,
+}
 
 export default function (state = initialState, actions) {
   switch (actions.type) {
     case GET_USER_PROFILE:
-      return{
+      return {
         ...state,
-        userProfile:actions.payload
+        userProfile: actions.payload,
       }
     default:
-      return state;
+      return state
   }
 }

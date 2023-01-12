@@ -1,72 +1,60 @@
-import React, { useState, useEffect,useRef } from 'react';
-import { Typography, Grid } from "@material-ui/core/";
-import ChatBar from "./ChatBar";
-import ChatMsg from "./ChatMsg";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core/"
+import { makeStyles } from "@material-ui/core/styles"
+import React, { useEffect, useRef } from "react"
+import ChatBar from "./ChatBar"
+import ChatMsg from "./ChatMsg"
 
-
-
-
-const useStyles = makeStyles((theme) => ({
-    date: {
-        fontWeight: 500,
-        color: "rgba(0,0,0,0.4)",
-        margin: "12px 0",
-        fontSize: 12,
-        textAlign: "center",
-        textTransform: "uppercase",
-    },
+const useStyles = makeStyles(theme => ({
+  date: {
+    fontWeight: 500,
+    color: "rgba(0,0,0,0.4)",
+    margin: "12px 0",
+    fontSize: 12,
+    textAlign: "center",
+    textTransform: "uppercase",
+  },
 }))
 
-const Chat = (props) => {
-    const classes = useStyles();
-    var [msgArray, set_msgArray] = React.useState(null);
-    var [msg, set_msg] = React.useState(null);
-    // console.log(props);
-    useEffect(()=>{
-        scrollToBottom()
-    })
-    useEffect(() => {
-
-        scrollToBottom()
-        return function cleanup() {
-            set_msg(null)
-            set_msgArray(null)
-        }
-    }, [props.chatId])
-    useEffect(() => {
-        console.log(msg);
-        if (msg !== null) {
-            if (msgArray !== null) {
-                set_msgArray([...msgArray, msg])
-            } else {
-                set_msgArray([msg])
-            }
-        }
-        scrollToBottom()
-    }, [msg])
-
-    
-   
-
-    const send = (msg) => {
-        // console.log(msg);
-        if (msg !== '') {
-            set_msg(msg)
-        }
-        // scrollToBottom()
+const Chat = props => {
+  const classes = useStyles()
+  var [msgArray, set_msgArray] = React.useState(null)
+  var [msg, set_msg] = React.useState(null)
+  // console.log(props);
+  useEffect(() => {
+    scrollToBottom()
+  })
+  useEffect(() => {
+    scrollToBottom()
+    return function cleanup() {
+      set_msg(null)
+      set_msgArray(null)
     }
-    const refContainer = useRef()
-    const scrollToBottom = () => {
-        console.log(refContainer);
-        // refContainer.current.scrollTop = refContainer.current.scrollHeight - refContainer.current.clientHeight;
-        refContainer.current.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-      }
-    return (
-        <>
-            <Typography className={classes.date}>fri 1:46 PM</Typography>
-            
-            {/* <ChatMsg
+  }, [props.chatId])
+  useEffect(() => {
+    if (msg) {
+      if (msgArray) set_msgArray([...msgArray, msg])
+      else set_msgArray([msg])
+    }
+    scrollToBottom()
+  }, [msg])
+
+  const send = msg => {
+    // console.log(msg);
+    if (msg !== "") set_msg(msg)
+
+    // scrollToBottom()
+  }
+  const refContainer = useRef()
+  const scrollToBottom = () => {
+    console.log(refContainer)
+    // refContainer.current.scrollTop = refContainer.current.scrollHeight - refContainer.current.clientHeight;
+    refContainer.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+  }
+  return (
+    <>
+      <Typography className={classes.date}>fri 1:46 PM</Typography>
+
+      {/* <ChatMsg
                 avatar={""}
                 messages={[
                     "Im good.",
@@ -82,19 +70,18 @@ const Chat = (props) => {
             <ChatMsg messages={["hello", "hi", "how r u?"]} side={"right"} />
             <ChatMsg messages={["hello", "i am fine bro", "how r u?"]} />
             <ChatMsg messages={["good"]} side={"right"} /> */}
-            {
-                msgArray ? msgArray.map((i) => {
-                    // console.log(msgArray);
-                    return (<ChatMsg key={Math.random() * 5} messages={[i]} side={"right"} />)
-                }) : ""
-            }
+      {msgArray
+        ? msgArray.map(i => {
+            // console.log(msgArray);
+            return <ChatMsg key={Math.random() * 5} messages={[i]} side={"right"} />
+          })
+        : ""}
 
-            
-<div style={{height:"48px"}}/>
+      <div style={{ height: "48px" }} />
 
-            <div ref={refContainer}/>
-            <ChatBar send={send} />
-</>
-    )
+      <div ref={refContainer} />
+      <ChatBar send={send} />
+    </>
+  )
 }
 export default Chat

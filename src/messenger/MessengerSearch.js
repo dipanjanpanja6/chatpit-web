@@ -1,39 +1,43 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Search from '@material-ui/icons/Search';
+import React from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import InputBase from "@material-ui/core/InputBase"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import Search from "@material-ui/icons/Search"
 const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: 'rgba(0, 0, 0, .04)',
+    backgroundColor: "rgba(0, 0, 0, .04)",
     borderRadius: 40,
-    width: '100%'
+    width: "100%",
   },
   input: {
-    boxSizing: 'border-box',
-    minHeight: 36
-  }
-}));
+    boxSizing: "border-box",
+    minHeight: 36,
+  },
+}))
 const useAdornStyles = makeStyles(() => ({
   root: {
     paddingLeft: 12,
-    '& svg': {
-      color: 'rgba(0,0,0,0.38)'
-    }
-  }
-}));
+    "& svg": {
+      color: "rgba(0,0,0,0.38)",
+    },
+  },
+}))
 
 const MessengerSearch = () => {
-  const styles = useStyles();
-  const adornStyles = useAdornStyles();
+  const styles = useStyles()
+  const adornStyles = useAdornStyles()
   return React.createElement(InputBase, {
     classes: styles,
-    startAdornment: React.createElement(InputAdornment, {
-      position: 'start',
-      classes: adornStyles
-    }, React.createElement(Search, null)),
-    placeholder: 'Search Messenger'
-  });
-};
+    startAdornment: React.createElement(
+      InputAdornment,
+      {
+        position: "start",
+        classes: adornStyles,
+      },
+      React.createElement(Search, null)
+    ),
+    placeholder: "Search Messenger",
+  })
+}
 
-export default MessengerSearch;
+export default MessengerSearch
