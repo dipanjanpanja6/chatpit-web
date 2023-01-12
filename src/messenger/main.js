@@ -20,7 +20,7 @@ import ChatsHeader from "./ChatList"
 import ChatSet from "./ChatsHeader"
 import ConversationHead from "./ConversationHead"
 
-// const messenger = io(`${url}/messenger`)
+// const messenger = io(`${url}/messenger`,{transports: ['websocket']})
 const token = sessionStorage.getItem("token")
 
 const drawerWidth = 300

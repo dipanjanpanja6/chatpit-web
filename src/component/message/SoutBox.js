@@ -47,7 +47,7 @@ const config = {
   length: 1,
 }
 const nam = uniqueNamesGenerator(config)
-const BoxServer = io(`${url}/shoutBox`)
+const BoxServer = io(`${url}/shoutBox`, { transports: ["websocket"] })
 
 class Soutbox extends Component {
   constructor() {
