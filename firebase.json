@@ -2,14 +2,6 @@
   "hosting": {
     "public": "build",
     "site": "chatpitbeta",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [{
-      "source": "**",
-      "destination": "/index.html"
-      }]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }

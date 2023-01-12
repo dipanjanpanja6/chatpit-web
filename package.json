@@ -34,9 +34,9 @@
     "unique-names-generator": "^4.2.0"
   },
   "scripts": {
-   
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "react-scripts --max_old_space_size=4096 start",
-    "build": "react-scripts build",
+    "build": "NODE_OPTIONS='--openssl-legacy-provider' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
