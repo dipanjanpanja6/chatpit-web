@@ -148,8 +148,8 @@ class Soutbox extends Component {
             className={classes.input}
             onKeyDown={this.keyDown}
             onChange={this.handleChange}
-            value={msg} 
-            fullWidth 
+            value={msg}
+            fullWidth
             id="msg"
             placeholder="Type a message..."
             endAdornment={React.createElement(
