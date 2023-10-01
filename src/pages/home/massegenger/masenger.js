@@ -1,13 +1,11 @@
 /* eslint-disable no-use-before-define,react/no-array-index-key */
-import React from "react"
 import Box from "@material-ui/core/Box"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import Toolbar from "@material-ui/core/Toolbar"
-import IconButton from "@material-ui/core/IconButton"
-import Edit from "@material-ui/icons/Edit"
-import { makeStyles, createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles"
-import { Root, Header, Content, Sidebar, SecondaryInsetSidebar, InsetContainer, Footer, ConfigGenerator } from "@mui-treasury/layout"
-import { MessengerSearch, ChatsHeader, ChatList, ConversationHead, ChatSettings, ChatBar, ChatDialog } from "@mui-treasury/mockup/brands/messenger"
+import { createTheme, makeStyles, responsiveFontSizes } from "@material-ui/core/styles"
+import { ConfigGenerator, Content, Footer, Header, InsetContainer, Root } from "@mui-treasury/layout"
+import { ChatBar, ChatDialog, ConversationHead } from "@mui-treasury/mockup/brands/messenger"
+import React from "react"
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -43,7 +41,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const theme = responsiveFontSizes(
-  createMuiTheme({
+  createTheme({
     palette: {
       primary: {
         main: "rgb(0, 153, 255)",

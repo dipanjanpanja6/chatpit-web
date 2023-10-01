@@ -48,16 +48,14 @@ const ChatBar = props => {
     set_msg(e.target.value)
   }
   const send2 = () => {
-    if (msg !== "") {
-      props.send(msg)
-    }
-    if (msg == "") {
+    if (!msg)
       props.send({
         type: "image",
         alt: "sticker",
         src: "https://scontent.fbkk12-3.fna.fbcdn.net/v/t39.1997-6/47165057_2150118098374296_5034322199196991488_n.png?_nc_cat=1&_nc_eui2=AeGsL8WciYpwOySYRQINElIdV9NubJ7ZbWTW9J5-DlXHPiLCKR8Zvvd4nVyPH4Wa8kceFiL10mXvokNFcEJx9JWz-6XLYgCLmOgTniFDbSjUPw&_nc_ohc=pewFeK6M1ZIAQkL5L9QR2FZcwYjZ0FTWid2zHeUqboLU4azOITkLVGaog&_nc_ht=scontent.fbkk12-3.fna&oh=27a2a48aabccd4cdae4ec4f3f775daa9&oe=5EAF0F3B",
       })
-    }
+    else props.send(msg)
+
     set_msg("")
   }
   return (

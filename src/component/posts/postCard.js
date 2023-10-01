@@ -194,7 +194,7 @@ class postCard extends Component {
                   value={cmnt}
                   multiline={true}
                   fullWidth={true}
-                  rowsMax={4}
+                  maxRows={4}
                   id="cmnt"
                   placeholder="Type a message..."
                   endAdornment={React.createElement(

@@ -63,7 +63,7 @@ class Home extends Component {
     return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item className={classes.soutBoxContainer} xs={12} md={5} lg={3}>
-          <SoutBox key=" home_shoutBox" hight="72vh" />
+          <SoutBox key="home_shoutBox" hight="72vh" />
         </Grid>
 
         <Grid className={classes.postGrid} item xs={12} md={7} lg={6}>

@@ -1,14 +1,13 @@
+import { Button, IconButton, Paper, TextField, Typography } from "@material-ui/core"
+import withStyles from "@material-ui/core/styles/withStyles"
+import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate"
+import Image from "material-ui-image"
+import PropType from "prop-types"
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { Paper, Typography, TextField, Button, IconButton } from "@material-ui/core"
-import Image from "material-ui-image"
-import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate"
-import withStyles from "@material-ui/core/styles/withStyles"
 import { post, postNull } from "../../redux/action/postAction"
-import PropType from "prop-types"
-import { connect } from "react-redux"
-import { keys } from "@material-ui/core/styles/createBreakpoints"
 
 class NewPost extends Component {
   constructor() {
@@ -71,7 +70,7 @@ class NewPost extends Component {
           <Typography variant="h6">For new post</Typography>
           {isImg && <Image src={files} imageStyle={{ objectFit: "cover" }} aspectRatio={16 / 9} />}
 
-          <TextField id="postText" onChange={this.handleChange} value={postText} variant="outlined" fullWidth multiline rowsMax={4} className={classes.postInput} />
+          <TextField id="postText" onChange={this.handleChange} value={postText} variant="outlined" fullWidth multiline maxRows={4} className={classes.postInput} />
           <br />
 
           <Button onClick={this.handlePost} variant="contained" color="secondary">

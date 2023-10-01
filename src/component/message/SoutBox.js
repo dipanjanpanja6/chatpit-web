@@ -119,13 +119,14 @@ class Soutbox extends Component {
 
   render() {
     const { classes, hight } = this.props
-    const { msg, rMsg } = this.state
+    const { msg, rMsg: remoteMessage } = this.state
+
     return (
       <Paper className={classes.soutbox}>
         <ListItemText primary="Chatpit Shout Box" secondary="Whatever you write here will be seen by all members of Chatpit..." />
         <Divider />
         <div ref="messageList" className={classes.msgList} style={{ overflow: "auto", height: hight }}>
-          {rMsg?.map(p => (
+          {remoteMessage?.map(p => (
             <div key={Math.random() * 5} className={classes.msg}>
               <Grid container spacing={1} justify="flex-start" alignItems="center">
                 <Grid item style={{ textAlign: "left" }}>

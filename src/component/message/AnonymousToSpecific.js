@@ -94,7 +94,7 @@ class AnonymousToSpecific extends Component {
             value={msg}
             multiline
             fullWidth
-            rowsMax={4}
+            maxRows={4}
             id="msg"
             placeholder="Type a message..."
             endAdornment={React.createElement(
