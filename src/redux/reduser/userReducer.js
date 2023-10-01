@@ -4,7 +4,7 @@ const initialState = {
   userProfile: null,
 }
 
-export default function (state = initialState, actions) {
+export default function userReducer(state = initialState, actions) {
   switch (actions.type) {
     case GET_USER_PROFILE:
       return {

@@ -5,7 +5,7 @@ const initialState = {
   newPost: {},
 }
 
-export default function (state = initialState, actions) {
+export default function postReducer(state = initialState, actions) {
   switch (actions.type) {
     case GET_ALL_POST:
       return {
