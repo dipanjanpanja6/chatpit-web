@@ -4,7 +4,7 @@ import blue from "@material-ui/core/colors/blue"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogContent from "@material-ui/core/DialogContent"
-import { makeStyles, useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@material-ui/core/styles"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
 import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive"
@@ -13,12 +13,7 @@ import ShuffleIcon from "@material-ui/icons/Shuffle"
 import SpeakerNotesOffIcon from "@material-ui/icons/SpeakerNotesOff"
 import React from "react"
 
-const useStyles = makeStyles(theme => ({
-  listText: {},
-}))
 export default function ResponsiveDialog(props) {
-  const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -36,16 +31,9 @@ export default function ResponsiveDialog(props) {
               <ListItemIcon>
                 <SpeakerNotesOffIcon color="disabled" />
               </ListItemIcon>
-              <ListItemText className={classes.listText} primary="Anonymous Message" secondary="Receive Anonymous message with Profile link " />
+              <ListItemText primary="Anonymous Message" secondary="Receive Anonymous message with Profile link " />
               <ListItemSecondaryAction>
-                <Switch
-                  disabled
-                  checked
-                  edge="end"
-                  // checked={state.checked}
-                  // onChange={handleChange}
-                  name="checkedA"
-                />
+                <Switch disabled checked edge="end" name="checkedA" />
               </ListItemSecondaryAction>
             </ListItem>
             <Divider variant="inset" component="li" />
@@ -53,15 +41,9 @@ export default function ResponsiveDialog(props) {
               <ListItemIcon>
                 <ShuffleIcon color="secondary" />
               </ListItemIcon>
-              <ListItemText className={classes.listText} primary="Random Shout Box Username" secondary="Set your Username to Shout Box Username" />
+              <ListItemText primary="Random Shout Box Username" secondary="Set your Username to Shout Box Username" />
               <ListItemSecondaryAction>
-                <Switch
-                  disabled
-                  edge="end"
-                  // checked={state.checked}
-                  // onChange={handleChange}
-                  name="checkedA"
-                />
+                <Switch disabled edge="end" name="checkedA" />
               </ListItemSecondaryAction>
             </ListItem>
             <Divider variant="inset" component="li" />
@@ -70,15 +52,9 @@ export default function ResponsiveDialog(props) {
                 <NotificationsActiveIcon style={{ color: blue[500] }} />
                 {false && <NotificationsPausedIcon />}
               </ListItemIcon>
-              <ListItemText className={classes.listText} primary="Push Notification" secondary="Stop receiving live notifications" />
+              <ListItemText primary="Push Notification" secondary="Stop receiving live notifications" />
               <ListItemSecondaryAction>
-                <Switch
-                  disabled
-                  edge="end"
-                  // checked={state.checked}
-                  // onChange={handleChange}
-                  name="checkedA"
-                />
+                <Switch disabled edge="end" name="checkedA" />
               </ListItemSecondaryAction>
             </ListItem>
             <Divider variant="inset" component="li" />
@@ -86,7 +62,7 @@ export default function ResponsiveDialog(props) {
               <ListItemIcon>
                 <DeleteForeverIcon color="error" />
               </ListItemIcon>
-              <ListItemText className={classes.listText} primary="Delete Profile" secondary="Delete Post, Comment, Like, everything. This can not be undone" />
+              <ListItemText primary="Delete Profile" secondary="Delete Post, Comment, Like, everything. This can not be undone" />
             </ListItem>
           </List>
         </DialogContent>

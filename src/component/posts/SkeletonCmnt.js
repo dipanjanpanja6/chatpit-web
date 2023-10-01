@@ -1,7 +1,7 @@
-import React from "react"
+import { Grid } from "@material-ui/core/"
 import { makeStyles } from "@material-ui/core/styles"
-import { div, Grid } from "@material-ui/core/"
 import Skeleton from "@material-ui/lab/Skeleton"
+import React from "react"
 
 const useStyles = makeStyles(theme => ({
   small: {

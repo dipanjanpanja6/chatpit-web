@@ -116,10 +116,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function MiniDrawer(props) {
-  // console.log(props);
-  if (props.auth.auth == false) {
-    window.location = "/auth"
-  }
+  if (!props.auth.auth) window.location = "/auth"
+
   const uid = props.auth.auth.uid
   let name = ""
   let [ChatList, setChatList] = React.useState(null)
@@ -232,7 +230,7 @@ function MiniDrawer(props) {
     <Grid container justify="flex-end">
       <Grid item style={{ height: "calc(100vh - 142px)" }}>
         <Typography style={{ paddingTop: "142px", textAlign: "center" }} variant="h5">
-          Welcome to Chatpit Messenger Welcome to Chatpit Messenger Welcome to Chatpit Messenger
+          Welcome to Chatpit Messenger
         </Typography>
       </Grid>
     </Grid>

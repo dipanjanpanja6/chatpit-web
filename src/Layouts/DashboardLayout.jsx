@@ -1,5 +1,5 @@
 import { AppBar, Badge, Tab, Tabs } from "@material-ui/core"
-import { createMuiTheme, ThemeProvider, withStyles } from "@material-ui/core/styles"
+import { ThemeProvider, createTheme, withStyles } from "@material-ui/core/styles"
 import AccountCircleIcon from "@material-ui/icons/AccountCircle"
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined"
 import HomeIcon from "@material-ui/icons/Home"
@@ -78,7 +78,7 @@ class DashboardLayout extends Component {
 
     return (
       <ThemeProvider
-        theme={createMuiTheme({
+        theme={createTheme({
           palette: {
             primary: { main: "#fdd835", dark: "#000" },
             secondary: { main: "#ffb300" },

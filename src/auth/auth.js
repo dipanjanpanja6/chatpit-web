@@ -1,12 +1,11 @@
-import { Button, Divider, Grid, Paper, TextField, Typography } from "@material-ui/core"
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
+import { Box, Button, Divider, Grid, Paper, TextField, Typography } from "@material-ui/core"
+import { ThemeProvider, createTheme } from "@material-ui/core/styles"
 import withStyles from "@material-ui/core/styles/withStyles"
 import PropType from "prop-types"
 import React, { Component } from "react"
 import GoogleLogin from "react-google-login"
 import { connect } from "react-redux"
 import CopyRight from "../component/copyright"
-import AnonymousToSpecific from "../component/message/AnonymousToSpecific"
 import ShoutBox from "../component/message/SoutBox"
 import { url } from "../config/config"
 import { createToken, login, signUp } from "../redux/action/authaction"
@@ -103,168 +102,116 @@ class Auth extends Component {
   }
   render() {
     const { classes } = this.props
-    // console.log(this.state.mode.mode);
+    const inputProps = { variant: "outlined", margin: "dense", size: "small", required: true, fullWidth: true }
 
     return (
-      <ThemeProvider
-        theme={createMuiTheme({
-          palette: {
-            type: this.state.mode.mode,
-            primary: {
-              main: "#fdd835",
-              // dark:"#000"
-            },
-            secondary: {
-              main: "#ffb300",
-            },
-            // type: "dark",
-          },
-        })}>
-        <Grid
-          container
-          style={{
-            minHeight: "100vh",
-            textAlign: "center",
-            background: "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)",
-          }}>
+      <ThemeProvider theme={createTheme({ palette: { type: this.state.mode.mode, primary: { main: "#fdd835" }, secondary: { main: "#ffb300" } } })}>
+        <Grid container style={{ minHeight: "100vh", textAlign: "center", background: "linear-gradient(184deg, rgb(36, 0, 2) 0%, rgb(121, 11, 9) 30%, rgb(255, 212, 0) 100%)" }}>
           <Grid item xs={12} md={4}>
             <Paper className={classes.paper}>
               <Typography variant="h5">Be together, whenever.</Typography>
               <Typography variant="subtitle1">A simple way to connect anonymously with anyone</Typography>
               <Divider />
-              {this.state.signup ? (
-                <form onSubmit={this.handleSignUp} className={classes.from}>
-                  <TextField
-                    variant="outlined"
-                    margin="dense"
-                    size="small"
-                    id="signUpUserName"
-                    value={this.state.signUpUserName}
-                    onChange={this.handleChange}
-                    placeholder="User name"
-                    required
-                    autoFocus
-                  />
-                  <br />
-                  <TextField
-                    variant="outlined"
-                    required
-                    margin="dense"
-                    size="small"
-                    style={{ font: "medium" }}
-                    type="email"
-                    id="signupEmail"
-                    placeholder="Email address"
-                    value={this.state.signupEmail}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <TextField
-                    margin="dense"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    // size='small'
-                    variant="outlined"
-                    id="signupPassword"
-                    value={this.state.signupPassword}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <TextField
-                    margin="dense"
-                    type="password"
-                    placeholder="Retype password"
-                    required
-                    id="signupRepass"
-                    value={this.state.signupRepass}
-                    variant="outlined"
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <Button
-                    // fullWidth
-                    // show="false"
-                    className={classes.button}
-                    variant="contained"
-                    type="submit"
-                    color="secondary">
-                    Sign up
-                  </Button>
-                </form>
-              ) : (
-                <form onSubmit={this.handleLogin} className={classes.from}>
-                  <TextField
-                    autoFocus
-                    required
-                    variant="outlined"
-                    margin="dense"
-                    size="small"
-                    style={{ font: "medium" }}
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Email address"
-                    value={this.state.email}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <TextField
-                    margin="dense"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    // size='small'
-                    variant="outlined"
-                    id="loginPassword"
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <Button show="false" className={classes.button} variant="contained" type="submit" color="secondary">
-                    Sign in
-                  </Button>
-                </form>
-              )}
-
-              {this.state.signup ? (
-                <div>
-                  <Button className={classes.button} onClick={this.handleLoginClick} variant="contained" color="default">
-                    Existing user! Login
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <Button className={classes.button} onClick={this.handleLoginClick} variant="contained" color="default">
-                    Create new user
-                  </Button>
-                </div>
-              )}
-              <Button className={classes.button} onClick={this.oneTime} variant="contained" color="primary">
-                One time use*
-              </Button>
-              <br />
-              <GoogleLogin
-                clientId="672411401216-bd1qmtk0veo0jn4gmhc1vlgs4h5jgg9o.apps.googleusercontent.com"
-                buttonText="Login"
-                render={renderProps => (
-                  <Button onClick={renderProps.onClick} disabled={renderProps.disabled} className={classes.button} variant="contained" color="primary">
-                    continue with Google
-                  </Button>
+              <Box maxWidth={300} mx="auto" my={2}>
+                {this.state.signup ? (
+                  <form onSubmit={this.handleSignUp} className={classes.from}>
+                    <TextField
+                      {...inputProps}
+                      id="signUpUserName"
+                      autoComplete="new-username"
+                      value={this.state.signUpUserName}
+                      onChange={this.handleChange}
+                      placeholder="User name"
+                      autoFocus
+                    />
+                    <br />
+                    <TextField
+                      {...inputProps}
+                      style={{ font: "medium" }}
+                      type="email"
+                      id="signupEmail"
+                      placeholder="Email address"
+                      value={this.state.signupEmail}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <TextField
+                      {...inputProps}
+                      type="password"
+                      placeholder="Password"
+                      autoComplete="new-password"
+                      id="signupPassword"
+                      value={this.state.signupPassword}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <TextField {...inputProps} type="password" placeholder="Retype password" id="signupRepass" value={this.state.signupRepass} onChange={this.handleChange} />
+                    <br />
+                    <Button fullWidth className={classes.button} variant="contained" type="submit" color="secondary">
+                      Sign up
+                    </Button>
+                  </form>
+                ) : (
+                  <form onSubmit={this.handleLogin} className={classes.from}>
+                    <TextField
+                      autoFocus
+                      {...inputProps}
+                      style={{ font: "medium" }}
+                      type="email"
+                      id="loginEmail"
+                      placeholder="Email address"
+                      value={this.state.email}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <TextField {...inputProps} type="password" placeholder="Password" id="loginPassword" onChange={this.handleChange} />
+                    <br />
+                    <Button fullWidth show="false" className={classes.button} variant="contained" type="submit" color="secondary">
+                      Sign in
+                    </Button>
+                  </form>
                 )}
-                onSuccess={this.responseGoogle}
-                onFailure={this.responseGoogle}
-                cookiePolicy={"single_host_origin"}
-              />
-              <br />
-              <br />
+
+                {this.state.signup ? (
+                  <div>
+                    <Button fullWidth className={classes.button} onClick={this.handleLoginClick} variant="contained" color="default">
+                      Existing user! Login
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Button fullWidth className={classes.button} onClick={this.handleLoginClick} variant="contained" color="default">
+                      Create new user
+                    </Button>
+                  </div>
+                )}
+                <Button fullWidth className={classes.button} onClick={this.oneTime} variant="contained" color="primary">
+                  One time use*
+                </Button>
+
+                <GoogleLogin
+                  clientId="672411401216-bd1qmtk0veo0jn4gmhc1vlgs4h5jgg9o.apps.googleusercontent.com"
+                  buttonText="Login"
+                  render={renderProps => (
+                    <Button fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} className={classes.button} variant="contained" color="primary">
+                      continue with Google
+                    </Button>
+                  )}
+                  onSuccess={this.responseGoogle}
+                  onFailure={this.responseGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+              </Box>
+
               <Divider />
               <CopyRight />
             </Paper>
           </Grid>
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <div style={{ margin: "16px" }}>
               <AnonymousToSpecific key="auth_anonymous" hight="63vh" />
             </div>
-          </Grid>
+          </Grid> */}
           <Grid xs={12} md={4} item>
             <div style={{ margin: "16px" }}>
               <ShoutBox key="auth_shoutBox" hight="73vh" />
@@ -278,16 +225,14 @@ class Auth extends Component {
 
 const style = theme => ({
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 4),
     margin: theme.spacing(2),
-
-    // width:theme.spacing(16)*3,
     textAlign: "center",
     minHeight: "89vh",
   },
   button: {
     marginTop: "10px",
-    width: "220px",
+    // width: "220px",
   },
 })
 
@@ -296,6 +241,6 @@ Auth.propType = {
   login: PropType.func.isRequired,
   createToken: PropType.func.isRequired,
 }
-const mapState = state => ({})
+const mapState = () => ({})
 const mapActionsToProps = { signUp, login, createToken }
 export default connect(mapState, mapActionsToProps)(withStyles(style)(Auth))
